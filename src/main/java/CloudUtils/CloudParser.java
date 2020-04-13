@@ -1,4 +1,6 @@
 package CloudUtils;
 
-public class CloudParser {
+public class CloudParser
+{
+
 }

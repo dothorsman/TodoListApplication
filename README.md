@@ -1,14 +1,11 @@
-Name of the project
-    TodoListApplication
+Name of the project: TodoListApplication
     
-Team members
-    Dotty Horsman
-    Jiahao Fu
-    Brayden Gates
-    Michael Jackson 
-    Cole Newkerk
-    
+Team members: Dotty Horsman, Jiahao Fu, Brayden Gates, Michael Jackson, Cole Newkerk
+
+
 User stories
+    
+    
     “As someone who forgets a lot, I want to add items to my todo list because I don’t want to forget.”	
         Set a button to add to-do items
     
@@ -30,22 +27,11 @@ User stories
     "As a user who wants to know their to-do list intuitively, I hope the software can show me my to-do list intuitively and clearly."
         The app will have a statistics dashboard that shows the following statistics in one single piechart: number of all todo items, number of completed todo items, number of overdue todo items and number of pending todo items.
 
+
 Iteration plans
-    1st Iteration: the Basic Offline Requirements 
-        Get todo list from cloud
-        parse cloud info
-        Creating a Todo list
-        Creating todo item
-        Adding items to the list
-        Adding reminders (date and time) to the Todo list
-    2nd Iteration: Cloud Stuff
-        Create UI 
-        Upload todo list to cloud
-    3rd Iteration: Dashboard
-        Get the latest to-do list from the cloud
-        Add UI
-        Pie Chart
-        Sync button
-        Add button
-        Delete button
-        Revise button
+
+    1st Iteration: CloudGetter - Get todo list from cloud, CloudEditor - add and delete todo items in the cloud, TodoList, TodoItem
+     
+    2nd Iteration: Create UI - Sync button + Add button + Delete button + Revise button, Add Database functionality, CloudParser - parse cloud info
+        
+    3rd Iteration: Pie Chart, Adding reminders (date and time) to the Todo list
