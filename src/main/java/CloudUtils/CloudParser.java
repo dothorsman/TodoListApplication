@@ -6,9 +6,6 @@ import exceptions.CloudParserException;
 import todo.TodoItem;
 import todo.TodoList;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class CloudParser
 {
@@ -25,10 +22,10 @@ public class CloudParser
         return todoObject;
     }
 
-    public TodoList parseJsonTodoItem(String jsonString)
+    public static TodoItem parseJsonTodoItem(TodoItem jsonString)
     {
         JsonParser jsonParser = new JsonParser();
-        JsonElement rootElement = jsonParser.parse(jsonString);
+        JsonElement rootElement = jsonParser.parse(String.valueOf(jsonString));
         JsonArray rootObjects = rootElement.getAsJsonArray();
         TodoList todoList = new TodoList();
 
@@ -48,7 +45,7 @@ public class CloudParser
             todoItem.setDeadlineTime(year,month,date,hour,minute);
             todoList.addItemToTodoList(todoItem);
         }
-        return todoList;
+        return todoItem;
     }
 
 

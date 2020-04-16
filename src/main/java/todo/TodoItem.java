@@ -7,6 +7,12 @@ public class TodoItem
      private String title;
      private String owner = "team4";
      private String description;
+     private int deadlineYear;
+     private int deadlineMonth;
+     private int deadlineDate;
+     private int deadlineHour;
+     private int deadlineMinute;
+
      private int id; //might need to be final again
      private static int nextID=1;
      private boolean status;
@@ -25,6 +31,26 @@ public class TodoItem
           this.creationTime = LocalDateTime.now();
           this.completionTime = null;
           this.deadlineTime = LocalDateTime.of(deadlineYear, deadlineMonth, deadlineDate, deadlineHour, deadlineMinute);
+     }
+
+     public int getDeadlineYear() {
+          return deadlineYear;
+     }
+
+     public int getDeadlineMonth() {
+          return deadlineMonth;
+     }
+
+     public int getDeadlineDate() {
+          return deadlineDate;
+     }
+
+     public int getDeadlineHour() {
+          return deadlineHour;
+     }
+
+     public int getDeadlineMinute() {
+          return deadlineMinute;
      }
 
      public String getTitle() {
