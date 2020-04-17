@@ -46,7 +46,7 @@ public class TodoItem
           this.status = false;
           this.creationTime = LocalDateTime.now();
           this.completionTime = null;
-          this.deadlineTime = LocalDateTime.parse(duedate, DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm"));
+          this.deadlineTime = LocalDateTime.parse(duedate, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
      }
 
      public String getTitle() {
@@ -100,6 +100,10 @@ public class TodoItem
 
      public void setCreationTime() { this.creationTime = LocalDateTime.now(); }
 
+     public void setCreationTimeBy(String date) {
+          this.creationTime = LocalDateTime.parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+     }
+
      public LocalDateTime getCompletionTime() {
           return completionTime;
      }
@@ -108,24 +112,23 @@ public class TodoItem
           return deadlineTime;
      }
 
-     public void setDeadlineTime(String newDuedate)
+     public void snoozeDeadlineTime(String snoozeDate)
      {
-          this.deadlineTime = LocalDateTime.parse(newDuedate, DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm"));
-     }
-
-     public void snoozeDeadlineTime(long yearsAdded, long monthsAdded, long daysAdded, long hoursAdded, long minutesAdded)
-     {
-          this.deadlineTime = this.deadlineTime.plusYears(yearsAdded);
-          this.deadlineTime = this.deadlineTime.plusMonths(monthsAdded);
-          this.deadlineTime = this.deadlineTime.plusDays(daysAdded);
-          this.deadlineTime = this.deadlineTime.plusHours(hoursAdded);
-          this.deadlineTime = this.deadlineTime.plusMinutes(minutesAdded);
+          this.deadlineTime= LocalDateTime.parse(snoozeDate, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
      }
 
      public void completeItem()
      {
           this.completionTime = LocalDateTime.now();
           this.status = true;
+     }
+
+     public void setID(int id){
+          this.id = id;
+     }
+
+     public void setStatus(boolean status){
+          this.status=status;
      }
 
 

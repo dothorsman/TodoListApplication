@@ -3,8 +3,12 @@ package CloudUtils;
 import com.google.api.client.http.*;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import todo.TodoItem;
+import todo.TodoList;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -13,7 +17,7 @@ public class CloudEditor
     private HttpRequestFactory requestFactory;
     private String baseURL = "https://todoserver222.herokuapp.com/";
     private String todosURL = baseURL + "todos/";       // https://todoserver222.herokuapp.com/team4/todos
-    private String team4URL = baseURL + "team4/todos";
+    private String team4URL = baseURL + "team4/todos/";
 
     public CloudEditor()
     {
@@ -32,7 +36,6 @@ public class CloudEditor
         data.put("completion time", item.getCompletionTime());
         data.put("status", item.checkIfCompleted());
 
-
         HttpContent content = new UrlEncodedContent(data);
         HttpRequest postRequest = requestFactory.buildPostRequest(
                 new GenericUrl("https://todoserver222.herokuapp.com/team4/todos"), content);
@@ -41,7 +44,6 @@ public class CloudEditor
         int indexOfID = rawResponse.indexOf("\"id\"");
         String IDWithEnding = rawResponse.substring(indexOfID + 6);
         String IDWithoutEnding = IDWithEnding.substring(0, IDWithEnding.length() - 2);
-
 
         return(Integer.valueOf(IDWithoutEnding));
     }
@@ -82,8 +84,10 @@ public class CloudEditor
         originalItem.setCreationTime();
         data.put("creation time", originalItem.getCreationTime());
 
+        /*
         originalItem.setDeadlineTime(duedate);
         data.put("deadline time", originalItem.getDeadlineTime());
+         */
 
         //Completion time only updates to now if it is completed
         if(status == false)
@@ -116,22 +120,19 @@ public class CloudEditor
         return true;
     }
 
-    public List<String> getAllTeam4TodoItems() throws IOException
+    public String getAllTeam4TodoItems() throws IOException
     {
         HttpRequest getRequest = requestFactory.buildGetRequest(
                 new GenericUrl(team4URL));
         String rawResponse = getRequest.execute().parseAsString();
-
-        String[] split = rawResponse.split("},");
-        List<String> itemList = new ArrayList<>();
-        itemList = Arrays.asList(split);
-
-        return(itemList);
+        return rawResponse;
     }
 
+    /*
     public boolean clearCloud() throws IOException
     {
-        List<String> allItems = this.getAllTeam4TodoItems();
+        String allItems = this.getAllTeam4TodoItems();
+        List<TodoItem> =
         int indexOfID = -1;
         String IDWithEnding = null;
         int indexOfEnding = -1;
@@ -165,4 +166,26 @@ public class CloudEditor
             return(false);
         }
     }
+    */
+
+    public static void main(String[] args) throws IOException {
+
+        //Completed
+        TodoItem a = new TodoItem("CS222", "Assignment1","2020-04-01T12:00");
+        a.completeItem();
+
+        //Pending
+        TodoItem b = new TodoItem("CS222","Assignment2","2020-05-01T12:00");
+
+        //Overdue
+        TodoItem c = new TodoItem("CS222", "Assignment3", "2020-04-01T12:00");
+
+        CloudEditor cloud = new CloudEditor();
+        cloud.addTodoItem(a);
+        cloud.addTodoItem(b);
+        cloud.addTodoItem(c);
+
+    }
+
+
 }

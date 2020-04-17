@@ -27,21 +27,11 @@ public class Main {
                     //Add to-do item
                     System.out.println("Please enter a title");
                     String title = br.readLine();
-                    System.out.println("Please enter a owner");
-                    String owner = br.readLine();
                     System.out.println("Please enter a content");
                     String description = br.readLine();
-                    System.out.println("Please enter a year");
-                    int year = Integer.parseInt(br.readLine());
-                    System.out.println("Please enter a month");
-                    int month = Integer.parseInt(br.readLine());
-                    System.out.println("Please enter a date");
-                    int date = Integer.parseInt(br.readLine());
-                    System.out.println("Please enter a hour");
-                    int hour = Integer.parseInt(br.readLine());
-                    System.out.println("Please enter a minute");
-                    int minute = Integer.parseInt(br.readLine());
-                    TodoItem addItem = new TodoItem(title, description, owner);
+                    System.out.println("Please enter a due date");
+                    String duedate = br.readLine();
+                    TodoItem addItem = new TodoItem(title, description, duedate);
                     list.addItemToTodoList(addItem);
                     System.out.println();
                 }else if (input.equals("delete")){
@@ -60,7 +50,6 @@ public class Main {
                     System.out.println();
                 }else if (input.equals("snooze")){
                     /*
-                    //Delayed deadline for to-do items
                     list.printAllItemInformation();
                     System.out.println("Please enter the id of the to-do item you want to snooze: ");
                     int snoozedId = Integer.parseInt(br.readLine());
@@ -68,7 +57,7 @@ public class Main {
                     list.printItemDeadlineTime(snoozedId);
                     System.out.println("Please enter how many minutes you want to extend: ");
                     int snoozeTime = Integer.parseInt(br.readLine());
-                    //list.snoozeItemDeadlineTime(snoozedId, snoozeTime);                   FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                    list.snoozeItemDeadlineTime(snoozedId, snoozeTime);
                     System.out.println("The modification was successful. The current deadline for this to-do is: ");
                     list.printItemDeadlineTime(snoozedId);
                      */

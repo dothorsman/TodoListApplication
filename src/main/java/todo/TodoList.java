@@ -20,18 +20,12 @@ public class TodoList
         return itemsInTodoList;
     }
 
-    public void setItemsInTodoList(List<TodoItem> list) {
-        this.itemsInTodoList = list;
-    }
-
     public static String getNextNameDigit()
     {
         String digit = Integer.toString(nextNameDigit);
         nextNameDigit++;
         return(digit);
     }
-
-
 
     public String getNameOfList()
     {
@@ -43,11 +37,9 @@ public class TodoList
         nameOfTodoList = name;
     }
 
-
     public void addItemToTodoList(TodoItem item)
     {
         this.itemsInTodoList.add(item);
-        //put CloudSender.add(item) or CloudGetter.add(item) here
     }
 
     public void deleteItem(int id)
@@ -99,12 +91,13 @@ public class TodoList
         return Information;
     }
 
-    public void snoozeItemDeadlineTime(int id, String date)
-    {
-        for (TodoItem item: itemsInTodoList){
+    public void snoozeItemDueDate(int id, String newDueDate){
+        for (TodoItem item:itemsInTodoList){
             if (item.getId() == id){
-                item.setDeadlineTime(date);
+                item.snoozeDeadlineTime(newDueDate);
             }
         }
     }
+
+
 }

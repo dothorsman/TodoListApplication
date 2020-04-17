@@ -6,13 +6,9 @@ import exceptions.CloudParserException;
 import todo.TodoItem;
 import todo.TodoList;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class CloudParser
 {
-    //parse method creates a TodoList
     public static TodoItem parseJsonTodo(String jsonString) throws CloudParserException.ParameterIsNotJsonStringException
     {
         if(!(jsonString.charAt(0) == '{'))
@@ -31,21 +27,17 @@ public class CloudParser
         JsonElement rootElement = jsonParser.parse(jsonString);
         JsonArray rootObjects = rootElement.getAsJsonArray();
         TodoList todoList = new TodoList();
-
-
-        TodoItem todoItem = new TodoItem(null,null,null);
-
         for (JsonElement rootObject : rootObjects) {
             var title = rootObject.getAsJsonObject().getAsJsonPrimitive("title").getAsString();
             var description = rootObject.getAsJsonObject().getAsJsonPrimitive("description").getAsString();
-            var year = rootObject.getAsJsonObject().getAsJsonPrimitive("year").getAsInt();
-            var month = rootObject.getAsJsonObject().getAsJsonPrimitive("month").getAsInt();
-            var date = rootObject.getAsJsonObject().getAsJsonPrimitive("date").getAsInt();
-            var hour = rootObject.getAsJsonObject().getAsJsonPrimitive("hour").getAsInt();
-            var minute = rootObject.getAsJsonObject().getAsJsonPrimitive("minute").getAsInt();
-
-            todoItem.setTitle(title);
-            todoItem.setDescription(description);
+            var duedate = rootObject.getAsJsonObject().getAsJsonPrimitive("deadline time").getAsString();
+            var creationtime = rootObject.getAsJsonObject().getAsJsonPrimitive("creation time").getAsString();
+            var id = rootObject.getAsJsonObject().getAsJsonPrimitive("id").getAsInt();
+            var status = rootObject.getAsJsonObject().getAsJsonPrimitive("status").getAsBoolean();
+            TodoItem todoItem = new TodoItem(title,description,duedate);
+            todoItem.setCreationTimeBy(creationtime);
+            todoItem.setID(id);
+            todoItem.setStatus(status);
             todoList.addItemToTodoList(todoItem);
         }
         return todoList;
