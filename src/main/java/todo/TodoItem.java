@@ -1,5 +1,7 @@
 package todo;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.time.LocalDateTime;
 
 public class TodoItem

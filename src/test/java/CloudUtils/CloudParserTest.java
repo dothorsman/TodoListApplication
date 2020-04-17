@@ -11,9 +11,9 @@ class CloudParserTest {
 
     @Test
     void parseJsonTodoItem() throws CloudParserException {
-        TodoItem item0;
-        item0 = new TodoItem("test task 0", "just for testing 0",
-                2020, 5, 18, 12, 30);
+        String item0;
+        item0 = String.valueOf(new TodoItem("test task 0", "just for testing 0",
+                2020, 5, 18, 12, 30));
         var resultingList = CloudParser.parseJsonTodoItem(item0);
         assertEquals("test task 0", resultingList.getTitle());
         assertEquals("just for testing 0", resultingList.getDescription());

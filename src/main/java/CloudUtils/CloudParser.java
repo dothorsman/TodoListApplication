@@ -4,7 +4,9 @@ package CloudUtils;
 import com.google.gson.*;
 import exceptions.CloudParserException;
 import todo.TodoItem;
-import todo.TodoList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class CloudParser
@@ -22,31 +24,31 @@ public class CloudParser
         return todoObject;
     }
 
-    public static TodoItem parseJsonTodoItem(TodoItem jsonString)
-    {
-        JsonParser jsonParser = new JsonParser();
-        JsonElement rootElement = jsonParser.parse(String.valueOf(jsonString));
-        JsonArray rootObjects = rootElement.getAsJsonArray();
-        TodoList todoList = new TodoList();
 
-        TodoItem todoItem = new TodoItem(null,null,-1,-1,-1,-1,-1);
+    public static TodoItem parseJsonTodoItem(String jsonString) {
+        JsonParser jsonParser = new JsonParser();
+        JsonElement rootelement = jsonParser.parse(jsonString);
+        JsonElement rootElement = jsonParser.parse(jsonString);
+        JsonArray rootObjects = rootElement.getAsJsonArray();
+
+        List<TodoItem> todoItemList = new ArrayList<>();
 
         for (JsonElement rootObject : rootObjects) {
             var title = rootObject.getAsJsonObject().getAsJsonPrimitive("title").getAsString();
             var description = rootObject.getAsJsonObject().getAsJsonPrimitive("description").getAsString();
             var year = rootObject.getAsJsonObject().getAsJsonPrimitive("year").getAsInt();
-            var month = rootObject.getAsJsonObject().getAsJsonPrimitive("month").getAsInt();
-            var date = rootObject.getAsJsonObject().getAsJsonPrimitive("date").getAsInt();
-            var hour = rootObject.getAsJsonObject().getAsJsonPrimitive("hour").getAsInt();
-            var minute = rootObject.getAsJsonObject().getAsJsonPrimitive("minute").getAsInt();
+            var month = rootObject.getAsJsonObject().getAsJsonObject().getAsJsonPrimitive("month").getAsInt();
+            var date = rootObject.getAsJsonObject().getAsJsonObject().getAsJsonPrimitive("date").getAsInt();
+            var hour = rootObject.getAsJsonObject().getAsJsonObject().getAsJsonPrimitive("hour").getAsInt();
+            var minute = rootObject.getAsJsonObject().getAsJsonObject().getAsJsonPrimitive("minute").getAsInt();
 
-            todoItem.setTitle(title);
-            todoItem.setDescription(description);
-            todoItem.setDeadlineTime(year,month,date,hour,minute);
-            todoList.addItemToTodoList(todoItem);
+            TodoItem todoItem = new TodoItem(title, description, year, month, date, hour, minute);
+            todoItemList.add(todoItem);
+
+            return todoItem;
         }
-        return todoItem;
-    }
+        return (TodoItem) todoItemList;
 
+    }
 
 }
