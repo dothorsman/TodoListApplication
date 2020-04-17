@@ -17,7 +17,7 @@ class TodoItemTest
     void setup()
     {
         item = new TodoItem("Assignment1", "Remember to complete Assignment1 by next week",
-                2020, 4, 8, 11, 59);
+                "2020-05-18-12-30");
     }
 
     @Test
@@ -62,18 +62,6 @@ class TodoItemTest
     }
 
     @Test
-    void getConsecutiveIds()
-    {
-        TodoItem item2 = new TodoItem("Assignment2", "Remember to complete Assignment2 by next week",
-                2021, 5, 5, 1, 10);
-        TodoItem item3 = new TodoItem("Assignment3", "Remember to complete Assignment3 by next week",
-                2023, 1, 16, 18, 30);
-
-        assertEquals(item2.getId(), item.getId() + 1);
-        assertEquals(item3.getId(), item2.getId() + 1);
-    }
-
-    @Test
     void checkIfCompleted()
     {
         assertEquals(false, item.checkIfCompleted());
@@ -93,28 +81,9 @@ class TodoItemTest
         assertFalse(item.checkIfCompleted());
     }
 
-    @Test
-    void getDeadlineTime()
-    {
-        LocalDateTime expected = LocalDateTime.of(2020, 4, 8, 11, 59);
-        assertEquals(expected, item.getDeadlineTime());
-    }
 
-    @Test
-    void snoozeDeadlineTime()
-    {
-        item.snoozeDeadlineTime(1, 1, 1, 1, 1);
-        LocalDateTime expected = LocalDateTime.of(2021, 5, 9, 13, 00);
-        assertEquals(expected, item.getDeadlineTime());
-    }
 
-    @Test
-    void snoozeDeadlineTimeEmpty()
-    {
-        item.snoozeDeadlineTime(0, 0, 0, 0, 0);
-        LocalDateTime expected = LocalDateTime.of(2020, 4, 8, 11, 59);
-        assertEquals(expected, item.getDeadlineTime());
-    }
+
 
 
 }

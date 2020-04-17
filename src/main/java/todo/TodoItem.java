@@ -1,22 +1,44 @@
 package todo;
 
+import com.j256.ormlite.field.DataType;
+import com.j256.ormlite.field.DatabaseField;
+
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class TodoItem
 {
+     @DatabaseField()
      private String title;
+
+     @DatabaseField()
      private String owner = "team4";
+
+     @DatabaseField()
      private String description;
-     private int id; //might need to be final again
+
+     @DatabaseField(id = true)
+     private int id;
+
      private static int nextID=1;
+
+     @DatabaseField()
      private boolean status;
 
+     @DatabaseField(dataType=DataType.SERIALIZABLE)
      private LocalDateTime creationTime;
+
+     @DatabaseField(dataType=DataType.SERIALIZABLE)
      private LocalDateTime completionTime;
+
+     @DatabaseField(dataType=DataType.SERIALIZABLE)
      private LocalDateTime deadlineTime;
 
+     public TodoItem(){
 
-     public TodoItem(String title, String description, int year, int month, int date, int hour, int minute)
+     }
+
+     public TodoItem(String title, String description, String duedate)
      {
           this.title = title;
           this.description = description;
@@ -24,7 +46,7 @@ public class TodoItem
           this.status = false;
           this.creationTime = LocalDateTime.now();
           this.completionTime = null;
-          this.deadlineTime = LocalDateTime.of(year, month, date, hour, minute);
+          this.deadlineTime = LocalDateTime.parse(duedate, DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm"));
      }
 
      public String getTitle() {
@@ -38,13 +60,6 @@ public class TodoItem
      public String getOwner() {
           return owner;
      }
-
-     /*
-     public void setOwner(String owner)
-     {
-          this.owner = owner;
-     }
-     */
 
      public String getDescription() {
           return description;
@@ -89,19 +104,13 @@ public class TodoItem
           return completionTime;
      }
 
-     //maybe remove
-     public void setCompletionTime(int year, int month, int date, int hour, int minute)
-     {
-          this.completionTime = LocalDateTime.of(year, month, date, hour, minute);
-     }
-
      public LocalDateTime getDeadlineTime() {
           return deadlineTime;
      }
 
-     public void setDeadlineTime(int year, int month, int date, int hour, int minute)
+     public void setDeadlineTime(String newDuedate)
      {
-          this.deadlineTime = LocalDateTime.of(year, month, date, hour, minute);
+          this.deadlineTime = LocalDateTime.parse(newDuedate, DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm"));
      }
 
      public void snoozeDeadlineTime(long yearsAdded, long monthsAdded, long daysAdded, long hoursAdded, long minutesAdded)
@@ -118,5 +127,7 @@ public class TodoItem
           this.completionTime = LocalDateTime.now();
           this.status = true;
      }
+
+
 
 }

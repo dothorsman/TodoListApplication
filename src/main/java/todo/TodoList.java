@@ -1,9 +1,6 @@
 package todo;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class TodoList
@@ -11,6 +8,7 @@ public class TodoList
     private String nameOfTodoList = "";
     private static int nextNameDigit;
     private List<TodoItem> itemsInTodoList;
+    String Information="";
 
     public TodoList()
     {
@@ -18,12 +16,12 @@ public class TodoList
         itemsInTodoList = new ArrayList<>();
     }
 
-    public String getNameOfTodoList() {
-        return nameOfTodoList;
-    }
-
     public List<TodoItem> getItemsInTodoList() {
         return itemsInTodoList;
+    }
+
+    public void setItemsInTodoList(List<TodoItem> list) {
+        this.itemsInTodoList = list;
     }
 
     public static String getNextNameDigit()
@@ -32,6 +30,8 @@ public class TodoList
         nextNameDigit++;
         return(digit);
     }
+
+
 
     public String getNameOfList()
     {
@@ -43,20 +43,6 @@ public class TodoList
         nameOfTodoList = name;
     }
 
-    public TodoItem getItemFromTodoList(TodoItem item)
-    {
-        TodoItem resultingItem = null;
-        for (TodoItem todoItem : itemsInTodoList) {
-            if (todoItem == item) {
-                resultingItem = item;
-            }
-        }
-        return(resultingItem);
-    }
-
-    //public TodoItem getAllItemsFromTodoList() {
-
-    //}
 
     public void addItemToTodoList(TodoItem item)
     {
@@ -83,43 +69,41 @@ public class TodoList
         }
     }
 
-    //this needs to be updated for LocalDateTime
     public void printAllItemInformation(){
         for (TodoItem Item: itemsInTodoList){
             System.out.println("Title: " + Item.getTitle());
-            System.out.println("Content: " + Item.getDescription());
-            System.out.println("Owner: " + Item.getOwner());
+            System.out.println("Description: " + Item.getDescription());
             if (Item.checkIfCompleted()){
                 System.out.println("Status: Finished");
             }else {
                 System.out.println("Status: unfinished");
             }
             System.out.println("Id: " + Item.getId());
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            System.out.println("CreationTime: " + df.format(Item.getCreationTime().toString()));
-            System.out.println("DeadlineTime: " + df.format(Item.getDeadlineTime().toString()));
+            System.out.println("CreationTime: " + Item.getCreationTime());
+            System.out.println("DeadlineTime: " + Item.getDeadlineTime());
             if (Item.checkIfCompleted()){
-                System.out.println("CompletionTime: "+ df.format(Item.getCompletionTime().toString()));
+                System.out.println("CompletionTime: "+ Item.getCompletionTime());
             }
             System.out.println();
         }
     }
 
-    //this needs to be updated for LocalDateTime
-    public void printItemDeadlineTime(int id){
-        for (TodoItem Item: itemsInTodoList){
-            if (Item.getId() == id){
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                System.out.println(df.format(Item.getDeadlineTime().toString()));
+    public String AllItemInformation(){
+        Information="";
+        for (TodoItem item:itemsInTodoList){
+            Information +="\r\n"+ "Title: "+ item.getTitle()+"  Description: "+ item.getDescription()+"  Status: "+item.checkIfCompleted()+"  ID: "+item.getId()+"\r\n"+"DeadlineTime: " + item.getDeadlineTime() +"\r\n"+"CreationTime: " + item.getCreationTime()+ "\r\n";
+            if (item.checkIfCompleted()){
+                Information += "CompletionTime: "+ item.getCompletionTime()+"\r\n";
             }
         }
+        return Information;
     }
 
-    public void snoozeItemDeadlineTime(int id, long yearsAdded, long monthsAdded, long daysAdded, long hoursAdded, long minutesAdded)
+    public void snoozeItemDeadlineTime(int id, String date)
     {
         for (TodoItem item: itemsInTodoList){
             if (item.getId() == id){
-                item.snoozeDeadlineTime(yearsAdded, monthsAdded, daysAdded, hoursAdded, minutesAdded);
+                item.setDeadlineTime(date);
             }
         }
     }

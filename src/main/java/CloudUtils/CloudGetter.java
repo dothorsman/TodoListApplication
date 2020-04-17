@@ -33,7 +33,6 @@ public class CloudGetter
         {
             return null;
         }
-
         return rawResponse;
     }
 }

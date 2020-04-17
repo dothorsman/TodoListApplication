@@ -32,13 +32,13 @@ public class TodoItemManager
         }
     }
 
-    public TodoItem addQuote(TodoItem quote) {
+    public TodoItem addItem(TodoItem Item) {
         try {
-            int id =quote.getId();
+            int id =Item.getId();
             if (TodoItemDao.idExists(id)){
                 throw new QuoteIdExistsException(id);
             }else {
-                TodoItem newItem = TodoItemDao.createIfNotExists(quote);
+                TodoItem newItem = TodoItemDao.createIfNotExists(Item);
                 return newItem;
             }
         } catch (SQLException e) {
@@ -68,6 +68,10 @@ public class TodoItemManager
         }
     }
 
+    public void clear() throws SQLException {
+        TodoItemDao.delete(TodoItemDao.queryForAll());
+    }
+
     public void disposeResources() {
         try {
             TodoItemDao.getConnectionSource().close();
@@ -75,4 +79,5 @@ public class TodoItemManager
             throw new QuoteException("Couldn't close the source!", e);
         }
     }
+
 }

@@ -35,7 +35,7 @@ public class CloudEditor
 
         HttpContent content = new UrlEncodedContent(data);
         HttpRequest postRequest = requestFactory.buildPostRequest(
-                new GenericUrl("https://todoserver222.herokuapp.com/todos"), content);
+                new GenericUrl("https://todoserver222.herokuapp.com/team4/todos"), content);
         String rawResponse = postRequest.execute().parseAsString();
 
         int indexOfID = rawResponse.indexOf("\"id\"");
@@ -65,8 +65,7 @@ public class CloudEditor
 
     //maybe update with DateTime stuff instead of a billion parameters
     public boolean updateTodoItem(TodoItem originalItem, String title, String description,
-                                  boolean status, int yearDeadline, int monthDeadline, int dateDeadline,
-                                  int hourDeadline, int minuteDeadline) throws IOException
+                                  boolean status, String duedate) throws IOException
     {
         Map<String, Object> data = new LinkedHashMap<>();
 
@@ -83,7 +82,7 @@ public class CloudEditor
         originalItem.setCreationTime();
         data.put("creation time", originalItem.getCreationTime());
 
-        originalItem.setDeadlineTime(yearDeadline, monthDeadline, dateDeadline, hourDeadline, minuteDeadline);
+        originalItem.setDeadlineTime(duedate);
         data.put("deadline time", originalItem.getDeadlineTime());
 
         //Completion time only updates to now if it is completed

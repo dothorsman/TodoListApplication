@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+
 public class Main {
     public static void main(String[] args) {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
@@ -40,7 +41,7 @@ public class Main {
                     int hour = Integer.parseInt(br.readLine());
                     System.out.println("Please enter a minute");
                     int minute = Integer.parseInt(br.readLine());
-                    TodoItem addItem = new TodoItem(title, description, year, month, date, hour, minute);
+                    TodoItem addItem = new TodoItem(title, description, owner);
                     list.addItemToTodoList(addItem);
                     System.out.println();
                 }else if (input.equals("delete")){
@@ -58,6 +59,7 @@ public class Main {
                     list.completedItem(completedId);
                     System.out.println();
                 }else if (input.equals("snooze")){
+                    /*
                     //Delayed deadline for to-do items
                     list.printAllItemInformation();
                     System.out.println("Please enter the id of the to-do item you want to snooze: ");
@@ -69,6 +71,7 @@ public class Main {
                     //list.snoozeItemDeadlineTime(snoozedId, snoozeTime);                   FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                     System.out.println("The modification was successful. The current deadline for this to-do is: ");
                     list.printItemDeadlineTime(snoozedId);
+                     */
                     System.out.println();
                 }else if (input.equals("view")){
                     if (list.getItemsInTodoList().size()==0){
