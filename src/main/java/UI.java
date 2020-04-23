@@ -105,30 +105,34 @@ public class UI extends JFrame implements ActionListener {
         add.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Clear data
-                todoItems.setText("");
-                try {
-                    manager.clear();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                    //Check network connection
+                    if (!cloudGetter.checkURL()) {
+                    JOptionPane.showMessageDialog(null,"The network is not currently connected");
+                    }
+                    //Clear display information
+                    todoItems.setText("");
+                    try {
+                        manager.clear();
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    //Add new to-do item
+                    String addItemTitle = title.getText();
+                    String addItemDescription = description.getText();
+                    String addItemDueDate = duedate.getText();
+                    TodoItem addItem = new TodoItem(addItemTitle, addItemDescription, addItemDueDate);
+                    list.addItemToTodoList(addItem);
+                    //Add item to database
+                    manager.addItem(addItem);
+                    //Add item to cloud
+                    try {
+                        cloudEditor.addTodoItem(addItem);
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                    //Display in UI
+                    todoItems.setText(list.AllItemInformation());
                 }
-                //Add new to-do item
-                String addItemTitle = title.getText();
-                String addItemDescription = description.getText();
-                String addItemDueDate = duedate.getText();
-                TodoItem addItem = new TodoItem(addItemTitle, addItemDescription, addItemDueDate);
-                list.addItemToTodoList(addItem);
-                //Add item to database
-                manager.addItem(addItem);
-                //Add item to cloud
-                try {
-                    cloudEditor.addTodoItem(addItem);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-                //Display in UI
-                todoItems.setText(list.AllItemInformation());
-            }
         });
 
         //Delete button
@@ -137,6 +141,10 @@ public class UI extends JFrame implements ActionListener {
         delete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //Check network connection
+                if (!cloudGetter.checkURL()) {
+                    JOptionPane.showMessageDialog(null,"The network is not currently connected");
+                }
                 //Get the id of the to-do item user wants to delete
                 int deleteItemID = Integer.parseInt(operateID.getText());
                 //Delete item from todolist
@@ -158,17 +166,24 @@ public class UI extends JFrame implements ActionListener {
         sync.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Sync data from cloud to local
-                try {
-                    String JsonString = cloudGetter.getTodoItemJsonString();
-                    list = parser.parseJsonTodoItem(JsonString);
-                    manager.clear();
-                } catch (IOException | SQLException ioException) {
-                    ioException.printStackTrace();
-                }
-                //Sync data from cloud to database
-                for (TodoItem item:list.getItemsInTodoList()){
-                    manager.addItem(item);
+                //Check network connection
+                if (cloudGetter.checkURL()) {
+                    JOptionPane.showMessageDialog(null,"The network is connected");
+                    //Sync data from database (Network connection failed)
+                    list.setItemsInTodoList(manager.getAllItems());
+                }else {
+                    //Sync data from cloud to local
+                    try {
+                        String JsonString = cloudGetter.getTodoItemJsonString();
+                        list = parser.parseJsonTodoItem(JsonString);
+                        manager.clear();
+                    } catch (IOException | SQLException ioException) {
+                        ioException.printStackTrace();
+                    }
+                    //Sync data from cloud to database
+                    for (TodoItem item : list.getItemsInTodoList()) {
+                        manager.addItem(item);
+                    }
                 }
                 //Display current items
                 todoItems.setText(list.AllItemInformation());
@@ -183,6 +198,10 @@ public class UI extends JFrame implements ActionListener {
         snooze.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //Check network connection
+                if (!cloudGetter.checkURL()) {
+                    JOptionPane.showMessageDialog(null,"The network is not currently connected");
+                }
                 //Get the id of the to-do item user wants to snooze
                 int snoozedItemID = Integer.parseInt(operateID.getText());
                 //Get the date of the to-do item user wants to snooze
@@ -200,6 +219,10 @@ public class UI extends JFrame implements ActionListener {
         complete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //Check network connection
+                if (!cloudGetter.checkURL()) {
+                    JOptionPane.showMessageDialog(null,"The network is not currently connected");
+                }
                 //Get the id of the to-do item user wants to complete
                 int completedItemID = Integer.parseInt(operateID.getText());
                 //Complete item
