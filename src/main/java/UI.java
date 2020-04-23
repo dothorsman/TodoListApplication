@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 public class UI extends JFrame implements ActionListener {
 
@@ -259,10 +260,37 @@ public class UI extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    public static void main(String[] args) {
+
+    public static void main(String[] args)
+    {
+        Runnable r = new Runnable()
+        {
+            LocalDateTime fiveSecondsLater = LocalDateTime.now().plusSeconds(5);
+
+            @Override
+            public void run()
+            {
+                //either new function call or put a for loop to run through
+                // the overdue map here to get the name (and maybe times) of the deadline
+
+                while (LocalDateTime.now().isBefore(fiveSecondsLater))
+                {
+
+                    //or here
+
+                }
+
+                //or here
+
+                JOptionPane.showMessageDialog(null,   "The following item(s) are overdue!: "
+                + "put name (and maybe time) of the deadline");
+            }
+        };
+        Thread t = new Thread(r);
+        t.start();
+
         new UI();
     }
     @Override
-    public void actionPerformed(ActionEvent e) {
-    }
+    public void actionPerformed(ActionEvent e) { }
 }

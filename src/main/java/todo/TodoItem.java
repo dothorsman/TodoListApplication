@@ -80,7 +80,6 @@ public class TodoItem
           return id;
      }
 
-     //might need to change
      public void setIdToNextAvailable()
      {
           this.id = this.getNextID();
