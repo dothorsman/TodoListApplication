@@ -2,6 +2,7 @@ package cloudutils;
 
 import com.google.api.client.http.*;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import todo.TodoItem;
 
 import java.io.IOException;
 import java.net.URL;
@@ -10,8 +11,7 @@ import java.net.URLConnection;
 public class CloudGetter
 {
     private HttpRequestFactory requestFactory;
-    private String baseURL = "https://todoserver-team4.herokuapp.com/todos";
-
+    private String baseURL = "https://todoserver-team4.herokuapp.com/todos/";
 
     public CloudGetter() { requestFactory = new NetHttpTransport().createRequestFactory(); }
 
@@ -28,7 +28,7 @@ public class CloudGetter
         try
         {
             HttpRequest getRequest = requestFactory.buildGetRequest(
-                    new GenericUrl(" https://todoserver-team4.herokuapp.com/todos/" + id));
+                    new GenericUrl(baseURL + id));
             rawResponse = getRequest.execute().parseAsString();
         }
         catch (Exception e)
@@ -40,7 +40,7 @@ public class CloudGetter
 
     public boolean checkURL(){
         try{
-            URL url = new URL(" https://todoserver-team4.herokuapp.com/todos");
+            URL url = new URL(" https://todoserver-team4.herokuapp.com/todos/");
             URLConnection connection = url.openConnection();
             connection.connect();
             return true;
@@ -50,7 +50,6 @@ public class CloudGetter
             return false;
         }
     }
-    
 
 
 }

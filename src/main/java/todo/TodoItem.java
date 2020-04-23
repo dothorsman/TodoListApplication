@@ -38,7 +38,7 @@ public class TodoItem
 
      }
 
-     public TodoItem(String title, String description, String duedate)
+     public TodoItem(String title, String description, String deadline)
      {
           this.title = title;
           this.description = description;
@@ -46,7 +46,7 @@ public class TodoItem
           this.status = false;
           this.creationTime = LocalDateTime.now();
           this.completionTime = null;
-          this.deadlineTime = LocalDateTime.parse(duedate, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+          this.deadlineTime = LocalDateTime.parse(deadline, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
      }
 
      public String getTitle() {
@@ -86,13 +86,10 @@ public class TodoItem
           this.id = this.getNextID();
      }
 
-     public boolean checkIfCompleted() {
-          return status;
-     }
+     public void setID(int id) { this.id = id; }
 
-     public void changeToIncomplete() {
-          this.status = false;
-     }
+
+
 
      public LocalDateTime getCreationTime() {
           return creationTime;
@@ -104,17 +101,32 @@ public class TodoItem
           this.creationTime = LocalDateTime.parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
      }
 
-     public LocalDateTime getCompletionTime() {
-          return completionTime;
-     }
 
      public LocalDateTime getDeadlineTime() {
           return deadlineTime;
      }
 
+     public void setDeadlineTime(String newDeadline)
+     {
+          this.deadlineTime = LocalDateTime.parse(newDeadline, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+     }
+
      public void snoozeDeadlineTime(String snoozeDate)
      {
           this.deadlineTime = LocalDateTime.parse(snoozeDate, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+     }
+
+
+     public void setStatus(boolean status){
+          this.status=status;
+     }
+
+     public boolean checkIfCompleted() {
+          return status;
+     }
+
+     public void changeToIncomplete() {
+          this.status = false;
      }
 
      public void completeItem()
@@ -123,14 +135,26 @@ public class TodoItem
           this.status = true;
      }
 
-     public void setID(int id){
-          this.id = id;
-     }
-
-     public void setStatus(boolean status){
-          this.status=status;
+     public LocalDateTime getCompletionTime() {
+          return completionTime;
      }
 
 
+     public void updateItem(String newTitle, String newDescription, boolean newStatus, String newDeadline)
+     {
+          this.setTitle(newTitle);
+          this.setDescription(newDescription);
+          this.setCreationTime();
 
+          if(newStatus == false)
+          {
+               this.changeToIncomplete();
+          }
+          else
+          {
+               this.completeItem();
+          }
+
+          this.setDeadlineTime(newDeadline);
+     }
 }

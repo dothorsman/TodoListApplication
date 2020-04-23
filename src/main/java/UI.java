@@ -1,4 +1,5 @@
 import cloudutils.CloudEditor;
+import cloudutils.CloudGetter;
 import cloudutils.CloudParser;
 import database.TodoItemManager;
 import piechart.ChartUI;
@@ -31,7 +32,8 @@ public class UI extends JFrame implements ActionListener {
     JLabel operateNote;
 
     TodoList list = new TodoList();
-    CloudEditor cloud = new CloudEditor();
+    CloudGetter cloudGetter = new CloudGetter();
+    CloudEditor cloudEditor = new CloudEditor();
     CloudParser parser = new CloudParser();
     TodoItemManager manager = new TodoItemManager("TodoItem.db");
 
@@ -120,7 +122,7 @@ public class UI extends JFrame implements ActionListener {
                 manager.addItem(addItem);
                 //Add item to cloud
                 try {
-                    cloud.addTodoItem(addItem);
+                    cloudEditor.addTodoItem(addItem);
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -141,7 +143,7 @@ public class UI extends JFrame implements ActionListener {
                 list.deleteItem(deleteItemID);
                 //Delete item from cloud
                 try {
-                    cloud.deleteTodoItem(deleteItemID);
+                    cloudEditor.deleteTodoItem(deleteItemID);
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -158,7 +160,7 @@ public class UI extends JFrame implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 //Sync data from cloud to local
                 try {
-                    String JsonString = cloud.getAllTeam4TodoItems();
+                    String JsonString = cloudGetter.getTodoItemJsonString();
                     list = parser.parseJsonTodoItem(JsonString);
                     manager.clear();
                 } catch (IOException | SQLException ioException) {

@@ -2,7 +2,11 @@ package cloudutils;
 
 import com.google.api.client.http.*;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import todo.TodoItem;
+import todo.TodoList;
 
 import java.io.IOException;
 import java.util.*;
@@ -10,7 +14,7 @@ import java.util.*;
 public class CloudEditor
 {
     private HttpRequestFactory requestFactory;
-    private String baseURL = "https://todoserver-team4.herokuapp.com/todos";
+    private String baseURL = "https://todoserver-team4.herokuapp.com/todos/";
 
 
     public CloudEditor()
@@ -32,7 +36,7 @@ public class CloudEditor
 
         HttpContent content = new UrlEncodedContent(data);
         HttpRequest postRequest = requestFactory.buildPostRequest(
-                new GenericUrl("https://todoserver222.herokuapp.com/team4/todos"), content);
+                new GenericUrl(baseURL), content);
         String rawResponse = postRequest.execute().parseAsString();
 
         int indexOfID = rawResponse.indexOf("\"id\"");
@@ -58,115 +62,63 @@ public class CloudEditor
         return true;
     }
 
-    public boolean updateTodoItem(TodoItem originalItem, String title, String description,
-                                  boolean status, String duedate) throws IOException
+    public boolean updateTodoItem(TodoItem originalItem, String newTitle, String newDescription,
+                               boolean newStatus, String newDeadline) throws IOException
     {
         Map<String, Object> data = new LinkedHashMap<>();
 
-        originalItem.setTitle(title);
+        originalItem.updateItem(newTitle, newDescription, newStatus, newDeadline);
+
         data.put("title", originalItem.getTitle());
-
-        //change we need different owners
-        //originalItem.setOwner("");
         data.put("owner", originalItem.getOwner());
-
-        originalItem.setDescription(description);
         data.put("description", originalItem.getDescription());
-
-        originalItem.setCreationTime();
         data.put("creation time", originalItem.getCreationTime());
-
-        /*
-        originalItem.setDeadlineTime(duedate);
         data.put("deadline time", originalItem.getDeadlineTime());
-        */
-
-        //Completion time only updates to now if it is completed
-        if(status == false)
-        {
-            originalItem.changeToIncomplete();
-        }
-        else
-        {
-            originalItem.completeItem();
-        }
         data.put("completion time", originalItem.getCompletionTime());
         data.put("status", originalItem.checkIfCompleted());
 
-
-        originalItem.setIdToNextAvailable();
+        //originalItem.setIdToNextAvailable(); //will need to change with the id system update
         data.put("id", originalItem.getId());
 
         HttpContent content = new UrlEncodedContent(data);
+
         HttpRequest putRequest = requestFactory.buildPutRequest(
-                new GenericUrl(baseURL + originalItem.getId()), content);
+                new GenericUrl(baseURL + originalItem.getId()), content); //will need to be update with the new id system
         try
         {
             String rawResponse = putRequest.execute().parseAsString();
+
         }
-        catch (HttpResponseException hre)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    public String getAllTeam4TodoItems() throws IOException
-    {
-        HttpRequest getRequest = requestFactory.buildGetRequest(
-                new GenericUrl(baseURL));
-        String rawResponse = getRequest.execute().parseAsString();
-        return rawResponse;
-    }
-
-    /*
-    public boolean clearCloud() throws IOException
-    {
-        String Items = this.getAllTeam4TodoItems();
-        CloudParser parser = new CloudParser();
-
-        List<TodoItem> = parser.parseJsonTodoItem(allItems);
-        int indexOfID = -1;
-        String IDWithEnding = null;
-        int indexOfEnding = -1;
-        String IDWithoutEnding = null;
-
-        if(allItems.get(0).equals("[]"))
-        {
-            return(true);
-        }
-
-        for (int i = 0; i < allItems.size(); i++)
-        {
-            indexOfID = allItems.get(i).indexOf("\"id\"");
-            IDWithEnding = allItems.get(i).substring(indexOfID + 6);
-            indexOfEnding = IDWithEnding.indexOf(" ");
-            IDWithoutEnding = IDWithEnding.substring(0, indexOfEnding-1);
-
-            deleteTodoItem(Integer.valueOf(IDWithoutEnding));
-        }
-
-        HttpRequest getRequest = requestFactory.buildGetRequest(
-                new GenericUrl(team4URL));
-        String rawResponse = getRequest.execute().parseAsString();
-
-        if(rawResponse.equals("[]"))
-        {
-            return(true);
-        }
-        else
+        catch(HttpResponseException hre)
         {
             return(false);
         }
+
+        return(true);
     }
 
-     */
+    public boolean clearCloud() throws IOException
+    {
+        JsonParser jsonParser = new JsonParser();
+        CloudGetter getter = new CloudGetter();
 
-    public static void main(String[] args) throws IOException {
+        if(getter.getTodoItemJsonString().equals("[]"))
+        {
+            return(true);
+        }
 
+        JsonElement rootElement = jsonParser.parse(getter.getTodoItemJsonString());
+        JsonArray rootObjects = rootElement.getAsJsonArray();
+        for (JsonElement rootObject : rootObjects){
+            var number = rootObject.getAsJsonObject().getAsJsonPrimitive("id").getAsInt();
+            deleteTodoItem(number);
+        }
 
+        if(getter.getTodoItemJsonString().equals("[]"))
+        {
+            return(true);
+        }
+
+        return(false);
     }
-
-
 }

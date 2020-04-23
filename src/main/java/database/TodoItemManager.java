@@ -42,7 +42,7 @@ public class TodoItemManager
                 return newItem;
             }
         } catch (SQLException e) {
-            throw new QuoteException("Something happened when adding quote",e);
+            throw new QuoteException("Something happened when adding item",e);
         }
     }
 
@@ -50,7 +50,7 @@ public class TodoItemManager
         try {
             return TodoItemDao.queryForAll();
         } catch (SQLException e) {
-            throw new QuoteException("Something happened when getting all quotes", e);
+            throw new QuoteException("Something happened when getting all items", e);
         }
     }
 
@@ -64,7 +64,7 @@ public class TodoItemManager
                 throw new QuoteIdNotExistsException(id);
             }
         } catch (SQLException e) {
-            throw new QuoteException("Something happened when deleting quote!", e);
+            throw new QuoteException("Something happened when deleting item!", e);
         }
     }
 
