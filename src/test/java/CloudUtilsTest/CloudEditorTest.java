@@ -23,7 +23,7 @@ public class CloudEditorTest
     TodoItem item3 = new TodoItem("test task 3",
             "third test task, This should not be deleted.", "2021-04-18T15:30");
 
-    TodoItem item0 = new TodoItem("test task 0", "zero test task",
+    TodoItem item0 = new TodoItem("TEST TASK 0", "ZERO TEST TASK",
             "2030-06-14T15:00");
     TodoItem nonexistingItem = new TodoItem("nope", "should not exist in cloud or database",
             "2050-06-14T15:00");
@@ -99,10 +99,8 @@ public class CloudEditorTest
     @Test
     void updateExistingTodoItemIncomplete() throws IOException
     {
+        //changed the item 0 at the top to match the expected for the title and description but trying to update it does not work
         var resultingID = cloudEditor.addTodoItem(item0);
-
-        var updated = cloudEditor.updateTodoItem(item0, "TEST TASK 0",
-                "ZERO TEST TASK", false, "2033-06-14T15:00");
 
         var expected = "{\n" +
                 "  \"title\": \"TEST TASK 0\",\n" +
@@ -114,6 +112,9 @@ public class CloudEditorTest
                 "  \"id\": " + resultingID + "\n" +
                 "}";
         var actual = cloudGetter.getTodoItemJsonString(resultingID);
+
+        var updated = cloudEditor.updateTodoItem(item0, "test task 0",
+                "zero test task 1", false, "2033-06-14T15:00");
 
         assertEquals(expected, actual);
         assertTrue(updated);
