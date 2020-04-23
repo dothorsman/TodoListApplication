@@ -1,12 +1,8 @@
-package todoTest;
+package TodoTest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import todo.TodoItem;
 import todo.TodoList;
-
-import java.io.IOException;
-import java.util.Calendar;
 
 import static org.junit.jupiter.api.Assertions.*;
 

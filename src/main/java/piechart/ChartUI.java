@@ -1,6 +1,6 @@
-package PieChart;
+package piechart;
 
-import CloudUtils.CloudParser;
+import cloudutils.CloudParser;
 import org.javatuples.Pair;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -49,14 +49,15 @@ public class ChartUI extends JFrame {
         TodoList list;
         List<Pair<String, Integer>> pairs;
         try {
+            //parse data from cloud
             rawData = DataFetcher.getRawJSONfromAPI();
             list=parser.parseJsonTodoItem(rawData);
-            pairs=DataExtractor.analyzedata(list);
+            //analyze data
+            pairs= DataAnalysis.analyzeData(list);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Couldn't get data!");
             return new DefaultPieDataset();
         }
-
         return UIUtils.convertPairsToPieDataset(pairs);
     }
 

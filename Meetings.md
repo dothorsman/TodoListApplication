@@ -25,17 +25,22 @@ Iteration 2
     Medium: GroupMe / Email
     Members: Dotty Horsman, Brayden Gates, Cole Newkerk, Jiahao Fu, Michael Jackson
     
-    Meeting 2 - Assigning Work
-        Date + Time: 4/16 + 3:00pm
-        Medium: WebEx
-        Members: Dotty Horsman, Brayden Gates, Jiahao Fu, Michael Jackson, [Cole Newkerk]
+    Meeting 2 - Group Work
+    Date + Time: 4/16 + 3:00pm
+    Medium: WebEx
+    Members: Dotty Horsman, Brayden Gates, Jiahao Fu, Michael Jackson
     
 Iteration 3
 
-    Meeting 1 - 
-    Date + Time: 4/
-    Medium: 
-    Members: 
+    Meeting 1 - Assigning Work + Group Work
+    Date + Time: 4/21 + 3:00pm
+    Medium: WebEx
+    Members: Dotty Horsman, Brayden Gates, Jiahao Fu, Michael Jackson
+    
+    Meeting 2 - Group Work
+    Date + Time: 4/23 + 3:00pm
+    Medium: WebEx
+    Members: Dotty Horsman, Brayden Gates, Jiahao Fu, Michael Jackson
     
     
     

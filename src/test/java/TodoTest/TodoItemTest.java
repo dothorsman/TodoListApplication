@@ -1,11 +1,8 @@
-package todoTest;
+package TodoTest;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import todo.TodoItem;
-
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,15 +35,6 @@ class TodoItemTest
     {
         assertEquals("team4", item.getOwner());
     }
-
-    /*      maybe put back in if we need to change owners
-    @Test
-    void setOwner()
-    {
-        item.setOwner("TeamZero");
-        assertEquals("TeamZero", item.getOwner());
-    }
-    */
 
     @Test
     void getDescription()
@@ -82,7 +70,7 @@ class TodoItemTest
     }
 
 
-
+    //add update method test?
 
 
 

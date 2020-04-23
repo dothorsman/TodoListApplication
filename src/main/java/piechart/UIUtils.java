@@ -1,4 +1,4 @@
-package PieChart;
+package piechart;
 
 import org.javatuples.Pair;
 import org.jfree.data.general.DefaultPieDataset;
