@@ -77,13 +77,12 @@ public class CloudEditor
         data.put("completion time", originalItem.getCompletionTime());
         data.put("status", originalItem.checkIfCompleted());
 
-        //originalItem.setIdToNextAvailable(); //will need to change with the id system update
         data.put("id", originalItem.getId());
 
         HttpContent content = new UrlEncodedContent(data);
 
         HttpRequest putRequest = requestFactory.buildPutRequest(
-                new GenericUrl(baseURL + originalItem.getId()), content); //will need to be update with the new id system
+                new GenericUrl(baseURL + originalItem.getId()), content);
         try
         {
             String rawResponse = putRequest.execute().parseAsString();

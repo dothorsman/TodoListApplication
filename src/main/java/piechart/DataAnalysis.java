@@ -16,7 +16,7 @@ public class DataAnalysis {
         int completedNumbers=0;
         int pendingNumbers=0;
         int overdueNumbers=0;
-        //Analyze the status of to-do items
+
         for (TodoItem item: Itemlist){
             if (item.checkIfCompleted()){
                 completedNumbers+=1;

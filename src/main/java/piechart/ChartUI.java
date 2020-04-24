@@ -20,9 +20,9 @@ public class ChartUI extends JFrame {
         super(title);
 
         JFreeChart chart = ChartFactory.createPieChart3D(
-                title,                  // chart title
-                getPieData(),                // data
-                true,                   // include legend
+                title,
+                getPieData(),
+                true,
                 true,
                 false
         );
@@ -33,9 +33,7 @@ public class ChartUI extends JFrame {
         plot.setForegroundAlpha(0.5f);
 
         ChartPanel chartPanel = new ChartPanel(chart);
-        // default size
         chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-        // add it to our application
         setContentPane(chartPanel);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         pack();
@@ -49,10 +47,8 @@ public class ChartUI extends JFrame {
         TodoList list;
         List<Pair<String, Integer>> pairs;
         try {
-            //parse data from cloud
             rawData = DataFetcher.getRawJSONfromAPI();
             list=parser.parseJsonTodoItem(rawData);
-            //analyze data
             pairs= DataAnalysis.analyzeData(list);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Couldn't get data!");
