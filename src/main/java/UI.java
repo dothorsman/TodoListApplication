@@ -123,41 +123,41 @@ public class UI extends JFrame implements ActionListener {
         add.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                    //Check network connection
-                    if (!cloudGetter.checkURL()) {
+                //Check network connection
+                if (!cloudGetter.checkURL()) {
                     JOptionPane.showMessageDialog(null,"The network is not currently connected");
-                    }
-                    //Clear display information
-                    todoItems.setText("");
-                    try {
-                        manager.clear();
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
-                    }
-                    //Add new to-do item
-                    String addItemTitle = title.getText();
-                    String addItemDescription = description.getText();
-                    String addItemDueDate = duedate.getText();
-                    int addItemID = Integer.parseInt(setID.getText());
-                    if (list.checkForDuplicateID(addItemID)){
-                        JOptionPane.showMessageDialog(null,"Duplicate ID!");
-                        todoItems.setText(list.AllItemInformation());
-                    }else {
-                        TodoItem addItem = new TodoItem(addItemTitle, addItemDescription, addItemDueDate, addItemID);
-                        list.addItemToTodoList(addItem);
-                        //Add item to database
-                        manager.addItem(addItem);
-                        //Add item to cloud
-                        try {
-                            cloudEditor.addTodoItem(addItem);
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
-                        }
-                        JOptionPane.showMessageDialog(null, "Successfully added the to-do item!");
-                        //Display in UI
-                        todoItems.setText(list.AllItemInformation());
-                    }
                 }
+                //Clear display information
+                todoItems.setText("");
+                try {
+                    manager.clear();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+                //Add new to-do item
+                String addItemTitle = title.getText();
+                String addItemDescription = description.getText();
+                String addItemDueDate = duedate.getText();
+                int addItemID = Integer.parseInt(setID.getText());
+                if (list.checkForDuplicateID(addItemID)){
+                    JOptionPane.showMessageDialog(null,"Duplicate ID!");
+                    todoItems.setText(list.AllItemInformation());
+                }else {
+                    TodoItem addItem = new TodoItem(addItemTitle, addItemDescription, addItemDueDate, addItemID);
+                    list.addItemToTodoList(addItem);
+                    //Add item to database
+                    manager.addItem(addItem);
+                    //Add item to cloud
+                    try {
+                        cloudEditor.addTodoItem(addItem);
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                    JOptionPane.showMessageDialog(null, "Successfully added the to-do item!");
+                    //Display in UI
+                    todoItems.setText(list.AllItemInformation());
+                }
+            }
         });
         add.setSize(100,150);
         panel.add(add, addConstraints);
@@ -334,7 +334,7 @@ public class UI extends JFrame implements ActionListener {
                 if (!cloudGetter.checkURL()) {
                     JOptionPane.showMessageDialog(null,"The network is not currently connected");
                 }else {
-                ChartUI pieChart=new ChartUI("Todo Item PieChart");
+                    ChartUI pieChart=new ChartUI("Todo Item PieChart");
                 }
             }
         });
