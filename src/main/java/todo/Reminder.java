@@ -88,13 +88,15 @@ public class Reminder
 
     public List<TodoItem> getOverDueItems(TodoList list){
         List<TodoItem> Itemlist = list.getItemsInTodoList();
-        List<TodoItem> OverDueItems = new ArrayList<>();
+        List<TodoItem> OverdueItems = new ArrayList<>();
         for (TodoItem Item : Itemlist){
             if (Item.getDeadlineTime().isBefore(LocalDateTime.now())){
-                OverDueItems.add(Item);
+                if (!Item.checkIfCompleted()) {
+                    OverdueItems.add(Item);
+                }
             }
         }
-        return OverDueItems;
+        return OverdueItems;
     }
 
     public List<TodoItem> getDueWithin24HoursItems(TodoList list){
@@ -127,7 +129,7 @@ public class Reminder
         if (DueWithin24Hours.size() == 0){
             ReminderInformation += "\r\n"+ "There are currently no to-do items that will expire within 24 hours";
         }else {
-            ReminderInformation += "\r\n"+ "Here are the to-do items that will expire in 24 hours";
+            ReminderInformation += "\r\n"+ "Here are the to-do items that will expire in 24 hours:";
             for (TodoItem Item : DueWithin24Hours){
                 ReminderInformation += "\r\n" + "Title: " + Item.getTitle() + "\r\n" + "DeadlineTime: " + Item.getDeadlineTime() + "\r\n";
             }

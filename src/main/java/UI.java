@@ -235,9 +235,10 @@ public class UI extends JFrame implements ActionListener {
         reminder.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String reminderInformation = "";
                 list.setOverDueItems(reminders.getOverDueItems(list));
                 list.setDueWithin24HoursItems(reminders.getDueWithin24HoursItems(list));
-                String reminderInformation = reminders.getRemindeInformation(list.getItemsInTodoList(),list.getDueWithin24HoursItems());
+                reminderInformation = reminders.getRemindeInformation(list.getOverDueItems(),list.getDueWithin24HoursItems());
                 JOptionPane.showMessageDialog(null,reminderInformation);
             }
         });

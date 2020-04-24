@@ -52,8 +52,8 @@ public class TodoList
         return DueWithin24HoursItems;
     }
 
-    public void setDueWithin24HoursItems(List<TodoItem> dueWithin24HoursItems) {
-        DueWithin24HoursItems = dueWithin24HoursItems;
+    public void setDueWithin24HoursItems(List<TodoItem> list) {
+        DueWithin24HoursItems = list;
     }
 
     public String getNameOfList()
