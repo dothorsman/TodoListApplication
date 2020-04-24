@@ -17,16 +17,16 @@ public class CloudEditorTest
     CloudGetter cloudGetter;
 
     TodoItem item1 = new TodoItem("test task 1",
-            "first test task, This should not be deleted.", "2020-05-18T12:30");
+            "first test task, This should not be deleted.", "2020-05-18T12:30",1);
     TodoItem item2 = new TodoItem("test task 2",
-            "second test task, This should not be deleted.", "2020-04-18T01:30");
+            "second test task, This should not be deleted.", "2020-04-18T01:30",2);
     TodoItem item3 = new TodoItem("test task 3",
-            "third test task, This should not be deleted.", "2021-04-18T15:30");
+            "third test task, This should not be deleted.", "2021-04-18T15:30",3);
 
     TodoItem item0 = new TodoItem("TEST TASK 0", "ZERO TEST TASK",
-            "2030-06-14T15:00");
+            "2030-06-14T15:00",4);
     TodoItem nonexistingItem = new TodoItem("nope", "should not exist in cloud or database",
-            "2050-06-14T15:00");
+            "2050-06-14T15:00",5);
 
     boolean empty = false;
 

@@ -8,12 +8,15 @@ public class TodoList
     private String nameOfTodoList = "";
     private static int nextNameDigit;
     private List<TodoItem> itemsInTodoList;
+    private List<TodoItem> OverDueItems;
+    private List<TodoItem> DueWithin24HoursItems;
     String Information="";
 
     public TodoList()
     {
         nameOfTodoList = "List " + getNextNameDigit();
         itemsInTodoList = new ArrayList<>();
+        OverDueItems = new ArrayList<>();
     }
 
     public List<TodoItem> getItemsInTodoList() {
@@ -25,6 +28,32 @@ public class TodoList
         String digit = Integer.toString(nextNameDigit);
         nextNameDigit++;
         return(digit);
+    }
+
+    public boolean checkForDuplicateID(int id){
+        boolean status = false;
+        for (TodoItem item : itemsInTodoList) {
+            if (item.getId() == id) {
+                status = true;
+            }
+        }
+        return status;
+    }
+
+    public void setOverDueItems(List<TodoItem> list){
+        this.OverDueItems = list;
+    }
+
+    public List<TodoItem> getOverDueItems(){
+        return OverDueItems;
+    }
+
+    public List<TodoItem> getDueWithin24HoursItems() {
+        return DueWithin24HoursItems;
+    }
+
+    public void setDueWithin24HoursItems(List<TodoItem> dueWithin24HoursItems) {
+        DueWithin24HoursItems = dueWithin24HoursItems;
     }
 
     public String getNameOfList()
@@ -39,7 +68,10 @@ public class TodoList
 
     public void addItemToTodoList(TodoItem item)
     {
-        this.itemsInTodoList.add(item);
+        int addItemID = item.getId();
+        if (!checkForDuplicateID(addItemID)){
+            this.itemsInTodoList.add(item);
+        }
     }
 
     public void deleteItem(int id)
@@ -58,25 +90,6 @@ public class TodoList
             if (todoItem.getId() == id) {
                 todoItem.completeItem();
             }
-        }
-    }
-
-    public void printAllItemInformation(){
-        for (TodoItem Item: itemsInTodoList){
-            System.out.println("Title: " + Item.getTitle());
-            System.out.println("Description: " + Item.getDescription());
-            if (Item.checkIfCompleted()){
-                System.out.println("Status: Finished");
-            }else {
-                System.out.println("Status: unfinished");
-            }
-            System.out.println("Id: " + Item.getId());
-            System.out.println("CreationTime: " + Item.getCreationTime());
-            System.out.println("DeadlineTime: " + Item.getDeadlineTime());
-            if (Item.checkIfCompleted()){
-                System.out.println("CompletionTime: "+ Item.getCompletionTime());
-            }
-            System.out.println();
         }
     }
 
@@ -99,5 +112,7 @@ public class TodoList
         }
     }
 
-
+    public void setItemsInTodoList(List<TodoItem> allItems) {
+        this.itemsInTodoList = allItems;
+    }
 }

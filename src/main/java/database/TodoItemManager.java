@@ -4,10 +4,10 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import exceptions.ItemException;
+import exceptions.ItemIdExistsException;
+import exceptions.ItemIdNotExistsException;
 import todo.TodoItem;
-import exceptions.QuoteException;
-import exceptions.QuoteIdExistsException;
-import exceptions.QuoteIdNotExistsException;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -28,7 +28,7 @@ public class TodoItemManager
             TableUtils.createTableIfNotExists(connectionSource, TodoItem.class);
             this.TodoItemDao = DaoManager.createDao(connectionSource, TodoItem.class);
         } catch (SQLException e) {
-            throw new QuoteException("Something related to connection happened!", e);
+            throw new ItemException("Something related to connection happened!", e);
         }
     }
 
@@ -36,13 +36,13 @@ public class TodoItemManager
         try {
             int id =Item.getId();
             if (TodoItemDao.idExists(id)){
-                throw new QuoteIdExistsException(id);
+                throw new ItemIdExistsException(id);
             }else {
                 TodoItem newItem = TodoItemDao.createIfNotExists(Item);
                 return newItem;
             }
         } catch (SQLException e) {
-            throw new QuoteException("Something happened when adding item",e);
+            throw new ItemException("Something happened when adding item",e);
         }
     }
 
@@ -50,7 +50,7 @@ public class TodoItemManager
         try {
             return TodoItemDao.queryForAll();
         } catch (SQLException e) {
-            throw new QuoteException("Something happened when getting all items", e);
+            throw new ItemException("Something happened when getting all items", e);
         }
     }
 
@@ -61,10 +61,10 @@ public class TodoItemManager
                 TodoItemDao.deleteById(id);
                 return Item;
             }else{
-                throw new QuoteIdNotExistsException(id);
+                throw new ItemIdNotExistsException(id);
             }
         } catch (SQLException e) {
-            throw new QuoteException("Something happened when deleting item!", e);
+            throw new ItemException("Something happened when deleting item!", e);
         }
     }
 
@@ -76,7 +76,7 @@ public class TodoItemManager
         try {
             TodoItemDao.getConnectionSource().close();
         } catch (IOException e) {
-            throw new QuoteException("Couldn't close the source!", e);
+            throw new ItemException("Couldn't close the source!", e);
         }
     }
 

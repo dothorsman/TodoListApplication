@@ -3,6 +3,7 @@ import cloudutils.CloudGetter;
 import cloudutils.CloudParser;
 import database.TodoItemManager;
 import piechart.ChartUI;
+import todo.Reminder;
 import todo.TodoItem;
 import todo.TodoList;
 
@@ -12,7 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 
 public class UI extends JFrame implements ActionListener {
 
@@ -21,6 +21,7 @@ public class UI extends JFrame implements ActionListener {
     JTextField description;
     JTextField duedate;
     JTextField operateID;
+    JTextField setID;
     JButton add;
     JButton delete;
     JButton complete;
@@ -28,16 +29,19 @@ public class UI extends JFrame implements ActionListener {
     JButton update;
     JButton sync;
     JButton pieChart;
+    JButton reminder;
     JLabel titleNote;
     JLabel descriptionNote;
     JLabel dueDateNote;
     JLabel operateNote;
+    JLabel setIDNote;
 
     TodoList list = new TodoList();
     CloudGetter cloudGetter = new CloudGetter();
     CloudEditor cloudEditor = new CloudEditor();
     CloudParser parser = new CloudParser();
     TodoItemManager manager = new TodoItemManager("TodoItem.db");
+    Reminder reminders = new Reminder();
 
     public UI(){
         super("Todo Application");
@@ -49,9 +53,9 @@ public class UI extends JFrame implements ActionListener {
 
         //Area showing to-do items
         todoItems = new JTextArea("This will show all current todo items");
-        var recentConstraints = new GridBagConstraints(1, 0, 1,5 , 0, 0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10), 0, 0);
+        var recentConstraints = new GridBagConstraints(0, 0, 2,10 , 0, 0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10), 0, 0);
         panel.add(todoItems, recentConstraints);
-        todoItems.setSize(900,900);
+        todoItems.setSize(1200,900);
 
         //Operation tips label
         titleNote = new JLabel("Please enter a title:");
@@ -83,21 +87,33 @@ public class UI extends JFrame implements ActionListener {
         panel.add(dueDateNote, dueDateConstraints);
         titleNote.setSize(150,150);
 
-        ////Area to enter due date
+        //Area to enter due date
         duedate = new JTextField("");
         var dateConstraints = new GridBagConstraints(2, 5, 3, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0);
         panel.add(duedate, dateConstraints);
         duedate.setSize(150,150);
 
+        //Set id tips label
+        setIDNote = new JLabel("Please enter an id (follow the order of existing ids) :");
+        var setIDNoteConstraints = new GridBagConstraints(2, 6, 3, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0);
+        panel.add(setIDNote, setIDNoteConstraints);
+        setIDNote.setSize(150,150);
+
+        //Area to enter id
+        setID = new JTextField("");
+        var setIDConstraints = new GridBagConstraints(2, 7, 3, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0);
+        panel.add(setID, setIDConstraints);
+        setID.setSize(150,150);
+
         //Operation tips label
         operateNote = new JLabel("Please enter the id of the item you want to operate:");
-        var operateNoteConstraints = new GridBagConstraints(2, 6, 3, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0);
+        var operateNoteConstraints = new GridBagConstraints(2, 8, 3, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0);
         panel.add(operateNote, operateNoteConstraints);
         operateNote.setSize(150,150);
 
         //Area to enter operate item ID
         operateID = new JTextField("");
-        var ownerConstraints = new GridBagConstraints(2, 7, 3, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0);
+        var ownerConstraints = new GridBagConstraints(2, 9, 3, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0);
         panel.add(operateID, ownerConstraints);
         operateID.setSize(150,150);
 
@@ -122,20 +138,29 @@ public class UI extends JFrame implements ActionListener {
                     String addItemTitle = title.getText();
                     String addItemDescription = description.getText();
                     String addItemDueDate = duedate.getText();
-                    TodoItem addItem = new TodoItem(addItemTitle, addItemDescription, addItemDueDate);
-                    list.addItemToTodoList(addItem);
-                    //Add item to database
-                    manager.addItem(addItem);
-                    //Add item to cloud
-                    try {
-                        cloudEditor.addTodoItem(addItem);
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
+                    int addItemID = Integer.parseInt(setID.getText());
+                    if (list.checkForDuplicateID(addItemID)){
+                        JOptionPane.showMessageDialog(null,"Duplicate ID!");
+                        todoItems.setText(list.AllItemInformation());
+                    }else {
+                        TodoItem addItem = new TodoItem(addItemTitle, addItemDescription, addItemDueDate, addItemID);
+                        list.addItemToTodoList(addItem);
+                        //Add item to database
+                        manager.addItem(addItem);
+                        //Add item to cloud
+                        try {
+                            cloudEditor.addTodoItem(addItem);
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                        JOptionPane.showMessageDialog(null, "Successfully added the to-do item!");
+                        //Display in UI
+                        todoItems.setText(list.AllItemInformation());
                     }
-                    //Display in UI
-                    todoItems.setText(list.AllItemInformation());
                 }
         });
+        add.setSize(100,150);
+        panel.add(add, addConstraints);
 
         //Delete button
         delete = new JButton("Delete");
@@ -149,7 +174,7 @@ public class UI extends JFrame implements ActionListener {
                 }
                 //Get the id of the to-do item user wants to delete
                 int deleteItemID = Integer.parseInt(operateID.getText());
-                //Delete item from todolist
+                //Delete item from local
                 list.deleteItem(deleteItemID);
                 //Delete item from cloud
                 try {
@@ -157,10 +182,13 @@ public class UI extends JFrame implements ActionListener {
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
+                JOptionPane.showMessageDialog(null,"Successfully deleted!");
                 //Display current to-do items
                 todoItems.setText(list.AllItemInformation());
             }
         });
+        delete.setSize(100,150);
+        panel.add(delete, deleteConstraints);
 
         //Update button
         update = new JButton("Update");
@@ -170,7 +198,7 @@ public class UI extends JFrame implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 //Get the id of the to-do item user wants to update
                 int updateItemID = Integer.parseInt(operateID.getText());
-                //Delete item from todolist
+                //Delete item from local
                 list.deleteItem(updateItemID);
                 //Delete item from cloud
                 try {
@@ -182,7 +210,8 @@ public class UI extends JFrame implements ActionListener {
                 String addItemTitle = title.getText();
                 String addItemDescription = description.getText();
                 String addItemDueDate = duedate.getText();
-                TodoItem addItem = new TodoItem(addItemTitle, addItemDescription, addItemDueDate);
+                int addItemid = Integer.parseInt(setID.getText());
+                TodoItem addItem = new TodoItem(addItemTitle, addItemDescription, addItemDueDate, addItemid);
                 list.addItemToTodoList(addItem);
                 //Add item to database
                 manager.addItem(addItem);
@@ -192,26 +221,40 @@ public class UI extends JFrame implements ActionListener {
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
+                JOptionPane.showMessageDialog(null,"Successfully updated!");
                 //Display in UI
                 todoItems.setText(list.AllItemInformation());
             }
         });
+        update.setSize(100,150);
+        panel.add(update, updateConstraints);
 
+        //Reminder button
+        reminder = new JButton("Reminder");
+        var reminderConstraints = new GridBagConstraints(1, 10, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0);
+        reminder.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                list.setOverDueItems(reminders.getOverDueItems(list));
+                list.setDueWithin24HoursItems(reminders.getDueWithin24HoursItems(list));
+                String reminderInformation = reminders.getRemindeInformation(list.getItemsInTodoList(),list.getDueWithin24HoursItems());
+                JOptionPane.showMessageDialog(null,reminderInformation);
+            }
+        });
+        panel.add(reminder, reminderConstraints);
+        reminder.setSize(150,150);
 
-        //Sync Button
+        //Sync button
         sync = new JButton("Sync");
-        var syncConstraints = new GridBagConstraints(1, 5, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0);
+        var syncConstraints = new GridBagConstraints(1, 11, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0);
         sync.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //Check network connection
-                if (cloudGetter.checkURL()) {
-                    JOptionPane.showMessageDialog(null,"The network is connected");
+                if (!cloudGetter.checkURL()) {
+                    JOptionPane.showMessageDialog(null,"The network is not currently connected");
                     //Sync data from database (Network connection failed)
-                    
-                    //had to comment out the line below to get the project to run!!
-                    //list.setItemsInTodoList(manager.getAllItems());
-
+                    list.setItemsInTodoList(manager.getAllItems());
                 }else {
                     //Sync data from cloud to local
                     try {
@@ -227,13 +270,14 @@ public class UI extends JFrame implements ActionListener {
                     }
                 }
                 //Display current items
+                JOptionPane.showMessageDialog(null,"Successfully synchronized!");
                 todoItems.setText(list.AllItemInformation());
             }
         });
         panel.add(sync, syncConstraints);
-        sync.setSize(300,150);
+        sync.setSize(150,150);
 
-        //Snooze Button
+        //Snooze button
         snooze = new JButton("Snooze");
         var snoozeConstraints = new GridBagConstraints(2, 11, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0);
         snooze.addActionListener(new ActionListener() {
@@ -250,9 +294,12 @@ public class UI extends JFrame implements ActionListener {
                 //Snooze item
                 list.snoozeItemDueDate(snoozedItemID, newDate);
                 //Display current to-do items
+                JOptionPane.showMessageDialog(null,"Successfully snoozed!");
                 todoItems.setText(list.AllItemInformation());
             }
         });
+        snooze.setSize(100,150);
+        panel.add(snooze, snoozeConstraints);
 
 
         //Complete button
@@ -270,9 +317,12 @@ public class UI extends JFrame implements ActionListener {
                 //Complete item
                 list.completedItem(completedItemID);
                 //Display current to-do items
+                JOptionPane.showMessageDialog(null,"Successfully completed!");
                 todoItems.setText(list.AllItemInformation());
             }
         });
+        complete.setSize(100,150);
+        panel.add(complete, completeConstraints);
 
         //PieChart button
         pieChart = new JButton("piechart");
@@ -280,24 +330,18 @@ public class UI extends JFrame implements ActionListener {
         pieChart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //Check network connection
+                if (!cloudGetter.checkURL()) {
+                    JOptionPane.showMessageDialog(null,"The network is not currently connected");
+                }else {
                 ChartUI pieChart=new ChartUI("Todo Item PieChart");
+                }
             }
         });
-
-        add.setSize(100,150);
-        panel.add(add, addConstraints);
-        delete.setSize(100,150);
-        panel.add(delete, deleteConstraints);
-        complete.setSize(100,150);
-        panel.add(complete, completeConstraints);
-        snooze.setSize(100,150);
-        panel.add(snooze, snoozeConstraints);
-        update.setSize(100,150);
-        panel.add(update, updateConstraints);
         pieChart.setSize(100,150);
         panel.add(pieChart, pieChartConstraints);
 
-        setPreferredSize(new Dimension(1200, 600));
+        setPreferredSize(new Dimension(1200, 900));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         pack();
         setVisible(true);
@@ -306,32 +350,6 @@ public class UI extends JFrame implements ActionListener {
 
     public static void main(String[] args)
     {
-        Runnable r = new Runnable()
-        {
-            LocalDateTime fiveSecondsLater = LocalDateTime.now().plusSeconds(5);
-
-            @Override
-            public void run()
-            {
-                //either new function call or put a for loop to run through
-                // the overdue map here to get the name (and maybe times) of the deadline
-
-                while (LocalDateTime.now().isBefore(fiveSecondsLater))
-                {
-
-                    //or here
-
-                }
-
-                //or here
-
-                JOptionPane.showMessageDialog(null,   "The following item(s) are overdue!: "
-                + "put name (and maybe time) of the deadline");
-            }
-        };
-        Thread t = new Thread(r);
-        t.start();
-
         new UI();
     }
     @Override

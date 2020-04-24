@@ -14,7 +14,7 @@ class TodoItemTest
     void setup()
     {
         item = new TodoItem("Assignment1", "Remember to complete Assignment1 by next week",
-                "2020-04-15T12:00");
+                "2020-04-15T12:00",1);
     }
 
     @Test

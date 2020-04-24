@@ -20,8 +20,6 @@ public class TodoItem
      @DatabaseField(id = true)
      private int id;
 
-     private static int nextID=1;
-
      @DatabaseField()
      private boolean status;
 
@@ -38,11 +36,11 @@ public class TodoItem
 
      }
 
-     public TodoItem(String title, String description, String deadline)
+     public TodoItem(String title, String description, String deadline, int id)
      {
           this.title = title;
           this.description = description;
-          this.id = getNextID();
+          this.id = id;
           this.status = false;
           this.creationTime = LocalDateTime.now();
           this.completionTime = null;
@@ -73,22 +71,7 @@ public class TodoItem
           return id;
      }
 
-     public static int getNextID()
-     {
-          int id=nextID;
-          nextID++;
-          return id;
-     }
-
-     public void setIdToNextAvailable()
-     {
-          this.id = this.getNextID();
-     }
-
      public void setID(int id) { this.id = id; }
-
-
-
 
      public LocalDateTime getCreationTime() {
           return creationTime;
@@ -157,3 +140,4 @@ public class TodoItem
           this.setDeadlineTime(newDeadline);
      }
 }
+
