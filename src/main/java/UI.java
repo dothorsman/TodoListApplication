@@ -25,6 +25,7 @@ public class UI extends JFrame implements ActionListener {
     JButton delete;
     JButton complete;
     JButton snooze;
+    JButton update;
     JButton sync;
     JButton pieChart;
     JLabel titleNote;
@@ -161,6 +162,42 @@ public class UI extends JFrame implements ActionListener {
             }
         });
 
+        //Update button
+        update = new JButton("Update");
+        var updateConstraints = new GridBagConstraints(3, 11, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0);
+        update.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Get the id of the to-do item user wants to update
+                int updateItemID = Integer.parseInt(operateID.getText());
+                //Delete item from todolist
+                list.deleteItem(updateItemID);
+                //Delete item from cloud
+                try {
+                    cloudEditor.deleteTodoItem(updateItemID);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                //Add new to-do item
+                String addItemTitle = title.getText();
+                String addItemDescription = description.getText();
+                String addItemDueDate = duedate.getText();
+                TodoItem addItem = new TodoItem(addItemTitle, addItemDescription, addItemDueDate);
+                list.addItemToTodoList(addItem);
+                //Add item to database
+                manager.addItem(addItem);
+                //Add item to cloud
+                try {
+                    cloudEditor.addTodoItem(addItem);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                //Display in UI
+                todoItems.setText(list.AllItemInformation());
+            }
+        });
+
+
         //Sync Button
         sync = new JButton("Sync");
         var syncConstraints = new GridBagConstraints(1, 5, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0);
@@ -171,7 +208,10 @@ public class UI extends JFrame implements ActionListener {
                 if (cloudGetter.checkURL()) {
                     JOptionPane.showMessageDialog(null,"The network is connected");
                     //Sync data from database (Network connection failed)
-                    list.setItemsInTodoList(manager.getAllItems());
+                    
+                    //had to comment out the line below to get the project to run!!
+                    //list.setItemsInTodoList(manager.getAllItems());
+
                 }else {
                     //Sync data from cloud to local
                     try {
@@ -214,6 +254,7 @@ public class UI extends JFrame implements ActionListener {
             }
         });
 
+
         //Complete button
         complete = new JButton("Complete");
         var completeConstraints = new GridBagConstraints(4, 10, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0);
@@ -251,6 +292,8 @@ public class UI extends JFrame implements ActionListener {
         panel.add(complete, completeConstraints);
         snooze.setSize(100,150);
         panel.add(snooze, snoozeConstraints);
+        update.setSize(100,150);
+        panel.add(update, updateConstraints);
         pieChart.setSize(100,150);
         panel.add(pieChart, pieChartConstraints);
 
