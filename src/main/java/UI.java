@@ -134,7 +134,8 @@ public class UI extends JFrame implements ActionListener {
                     }
                     //Display in UI
                     todoItems.setText(list.AllItemInformation());
-                }
+                    String name = JOptionPane.showInputDialog(panel,"Add Succes", null);
+            }
         });
 
         //Delete button
@@ -159,6 +160,8 @@ public class UI extends JFrame implements ActionListener {
                 }
                 //Display current to-do items
                 todoItems.setText(list.AllItemInformation());
+                String name = JOptionPane.showInputDialog(panel,"Delete Succes", null);
+
             }
         });
 
@@ -194,6 +197,7 @@ public class UI extends JFrame implements ActionListener {
                 }
                 //Display in UI
                 todoItems.setText(list.AllItemInformation());
+                String name = JOptionPane.showInputDialog(panel,"Update Succes", null);
             }
         });
 
@@ -208,7 +212,7 @@ public class UI extends JFrame implements ActionListener {
                 if (cloudGetter.checkURL()) {
                     JOptionPane.showMessageDialog(null,"The network is connected");
                     //Sync data from database (Network connection failed)
-                    
+
                     //had to comment out the line below to get the project to run!!
                     //list.setItemsInTodoList(manager.getAllItems());
 
