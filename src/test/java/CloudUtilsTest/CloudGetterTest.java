@@ -28,6 +28,7 @@ class CloudGetterTest
                         "    \"description\": \"first test task, This should not be deleted.\",\n" +
                         "    \"creation time\": \"2020-04-22T12:07:50.592819100\",\n" +
                         "    \"deadline time\": \"2020-05-18T12:30\",\n" +
+                        "    \"completion time\": \"0001-01-01T01:01\",\n" +
                         "    \"status\": \"false\",\n" +
                         "    \"id\": 1\n" +
                         "  },\n" +
@@ -37,6 +38,7 @@ class CloudGetterTest
                         "    \"description\": \"second test task, This should not be deleted.\",\n" +
                         "    \"creation time\": \"2020-04-22T12:07:50.606775400\",\n" +
                         "    \"deadline time\": \"2020-04-18T12:30\",\n" +
+                        "    \"completion time\": \"0001-01-01T01:01\",\n" +
                         "    \"status\": \"false\",\n" +
                         "    \"id\": 2\n" +
                         "  },\n" +
@@ -46,6 +48,7 @@ class CloudGetterTest
                         "    \"description\": \"third test task, This should not be deleted.\",\n" +
                         "    \"creation time\": \"2020-04-22T12:07:50.606775400\",\n" +
                         "    \"deadline time\": \"2021-03-18T12:30\",\n" +
+                        "    \"completion time\": \"0001-01-01T01:01\",\n" +
                         "    \"status\": \"false\",\n" +
                         "    \"id\": 3\n" +
                         "  }\n" +
@@ -63,6 +66,7 @@ class CloudGetterTest
                         "  \"description\": \"first test task, This should not be deleted.\",\n" +
                         "  \"creation time\": \"2020-04-22T12:07:50.592819100\",\n" +
                         "  \"deadline time\": \"2020-05-18T12:30\",\n" +
+                        "    \"completion time\": \"0001-01-01T01:01\",\n" +
                         "  \"status\": \"false\",\n" +
                         "  \"id\": 1\n" +
                         "}"

@@ -28,9 +28,9 @@ class TodoItemManagerTest {
         TableUtils.dropTable(testConnection, TodoItem.class, true);
         TableUtils.createTableIfNotExists(testConnection, TodoItem.class);
         Dao<TodoItem, Integer> TodoItemDao = DaoManager.createDao(testConnection, TodoItem.class);
-        TodoItemDao.create(new TodoItem("Assignment1", "homework1" , "2020-04-15T12:00",1));
-        TodoItemDao.create(new TodoItem("Assignment2", "homework2" , "2020-04-16T12:00",2));
-        TodoItemDao.create(new TodoItem("Assignment3", "homework3" , "2020-04-17T12:00",3));
+        TodoItemDao.create(new TodoItem("Assignment1", "homework1" , "2020-04-15T12:00",1, "false","null"));
+        TodoItemDao.create(new TodoItem("Assignment2", "homework2" , "2020-04-16T12:00",2, "false","null"));
+        TodoItemDao.create(new TodoItem("Assignment3", "homework3" , "2020-04-17T12:00",3, "false", "null"));
         testConnection.close();
         ItemManager = new TodoItemManager("test.db");
     }
@@ -38,7 +38,7 @@ class TodoItemManagerTest {
     @Test
     void getAllQuotes() {
         var allActualItems = ItemManager.getAllItems();
-        var expectedItem1 = new TodoItem("Assignment1", "homework1" , "2020-04-15T12:00",1);
+        var expectedItem1 = new TodoItem("Assignment1", "homework1" , "2020-04-15T12:00",1,"false", "null");
         assertEquals(expectedItem1.getTitle(),allActualItems.get(0).getTitle());
         assertEquals(expectedItem1.getDescription(),allActualItems.get(0).getDescription());
         assertEquals(expectedItem1.getDeadlineTime(),allActualItems.get(0).getDeadlineTime());
@@ -47,7 +47,7 @@ class TodoItemManagerTest {
 
     @Test
     void addQuote_Success() {
-        var newItem = new TodoItem("Assignment4", "homework4" , "2020-04-18T12:00",4);
+        var newItem = new TodoItem("Assignment4", "homework4" , "2020-04-18T12:00",4,"false", "null");
         var resultingItem = ItemManager.addItem(newItem);
         assertEquals(newItem, resultingItem);
     }
@@ -63,7 +63,7 @@ class TodoItemManagerTest {
     @Test
     void deleteQuote_Success() {
         assertEquals(3, ItemManager.getAllItems().size());
-        var expectedQuote = new TodoItem("Assignment3", "homework3" , "2020-04-17T12:00",3);
+        var expectedQuote = new TodoItem("Assignment3", "homework3" , "2020-04-17T12:00",3,"false", "null");
         var resultingQuote = ItemManager.deleteItem(3);
         assertEquals(expectedQuote.getTitle(),resultingQuote.getTitle());
         assertEquals(expectedQuote.getDescription(),resultingQuote.getDescription());

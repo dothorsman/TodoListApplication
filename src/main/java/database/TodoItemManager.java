@@ -8,9 +8,12 @@ import exceptions.ItemException;
 import exceptions.ItemIdExistsException;
 import exceptions.ItemIdNotExistsException;
 import todo.TodoItem;
+import todo.TodoList;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class TodoItemManager
@@ -68,6 +71,39 @@ public class TodoItemManager
         }
     }
 
+    public TodoItem snoozeItem(int id, String newDate){
+        try {
+            if (TodoItemDao.idExists(id)) {
+                TodoItem completeItem = TodoItemDao.queryForId(id);
+                completeItem.setDeadlineTime(newDate);
+                TodoItemDao.update(new TodoItem(completeItem.getTitle(), completeItem.getDescription(), newDate, id, String.valueOf(completeItem.checkIfCompleted()), "null"));
+                return TodoItemDao.queryForId(id);
+            } else {
+                throw new ItemIdNotExistsException(id);
+            }
+        } catch (SQLException e) {
+            throw new ItemException("Couldn't complete item.", e);
+        }
+    }
+
+    public TodoItem completeItem(int id){
+        try {
+            if (TodoItemDao.idExists(id)) {
+                TodoItem Item = TodoItemDao.queryForId(id);
+                Item.completeItem();
+                String deadline = Item.getDeadlineTime().toString();
+                String completionTIme = Item.getCompletionTime().toString();
+                TodoItemDao.update(new TodoItem(Item.getTitle(), Item.getDescription(), deadline, id, String.valueOf(Item.checkIfCompleted()), completionTIme));
+                return TodoItemDao.queryForId(id);
+            } else {
+                throw new ItemIdNotExistsException(id);
+            }
+        } catch (SQLException e) {
+            throw new ItemException("Couldn't complete item.", e);
+        }
+    }
+
+
     public void clear() throws SQLException {
         TodoItemDao.delete(TodoItemDao.queryForAll());
     }
@@ -79,5 +115,11 @@ public class TodoItemManager
             throw new ItemException("Couldn't close the source!", e);
         }
     }
+
+    public static void main(String[] args) throws SQLException {
+        TodoItemManager database = new TodoItemManager();
+        database.clear();
+    }
+
 
 }

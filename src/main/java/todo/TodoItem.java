@@ -36,15 +36,25 @@ public class TodoItem
 
      }
 
-     public TodoItem(String title, String description, String deadline, int id)
+
+
+     public TodoItem(String title, String description, String deadline, int id, String status, String completionTime )
      {
           this.title = title;
           this.description = description;
           this.id = id;
-          this.status = false;
+          this.status = Boolean.parseBoolean(status);
           this.creationTime = LocalDateTime.now();
-          this.completionTime = null;
+          if (!completionTime.equals("null")){
+               this.completionTime = LocalDateTime.parse(completionTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+          }else {
+               this.completionTime = LocalDateTime.of(1,1,1,1,1);
+          }
           this.deadlineTime = LocalDateTime.parse(deadline, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+     }
+
+     public void setCompletionTime(LocalDateTime completionTime) {
+          this.completionTime = completionTime;
      }
 
      public String getTitle() {
@@ -120,6 +130,7 @@ public class TodoItem
      public LocalDateTime getCompletionTime() {
           return completionTime;
      }
+
 
 
      public void updateItem(String newTitle, String newDescription, boolean newStatus, String newDeadline)

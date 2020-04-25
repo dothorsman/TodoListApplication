@@ -1,5 +1,10 @@
 package todo;
 
+import cloudutils.CloudEditor;
+import database.TodoItemManager;
+
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,5 +119,30 @@ public class TodoList
 
     public void setItemsInTodoList(List<TodoItem> allItems) {
         this.itemsInTodoList = allItems;
+    }
+
+    public boolean matchingData(TodoItemManager database, TodoList cloud) throws SQLException, IOException {
+        if (database.getAllItems().size() > cloud.getItemsInTodoList().size()){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    public TodoItem findItemByID (int id){
+        TodoItem findItem = null;
+        for (TodoItem Item: itemsInTodoList){
+            if (Item.getId() == id){
+                findItem = Item;
+            }
+        }
+        return findItem;
+    }
+
+    public void synchronousData (TodoItemManager database, CloudEditor cloud) throws  IOException {
+        cloud.clearCloud();
+        for (TodoItem Item : database.getAllItems()){
+            cloud.addTodoItem(Item);
+        }
     }
 }
