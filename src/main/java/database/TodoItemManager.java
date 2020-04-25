@@ -8,12 +8,9 @@ import exceptions.ItemException;
 import exceptions.ItemIdExistsException;
 import exceptions.ItemIdNotExistsException;
 import todo.TodoItem;
-import todo.TodoList;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class TodoItemManager

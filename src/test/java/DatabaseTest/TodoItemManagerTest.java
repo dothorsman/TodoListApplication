@@ -53,6 +53,40 @@ class TodoItemManagerTest {
     }
 
     @Test
+    void snoozeItem_NotExistingId() {
+        assertThrows(ItemIdNotExistsException.class, () -> {
+            var resultingQuote = ItemManager.deleteItem(123);
+        });
+    }
+
+    @Test
+    void snoozeItem_Success() {
+        assertEquals(3, ItemManager.getAllItems().size());
+        var expectedQuote = new TodoItem("Assignment3", "homework3" , "2021-04-15T12:00",3,"false", "null");
+        var resultingQuote = ItemManager.snoozeItem(3,"2021-04-15T12:00");
+        assertEquals(expectedQuote.getTitle(),resultingQuote.getTitle());
+        assertEquals(expectedQuote.getDescription(),resultingQuote.getDescription());
+        assertEquals(expectedQuote.getDeadlineTime(),resultingQuote.getDeadlineTime());
+        assertEquals(expectedQuote.checkIfCompleted(),resultingQuote.checkIfCompleted());
+    }
+
+    @Test
+    void completeItem_NotExistingId() {
+        assertThrows(ItemIdNotExistsException.class, () -> {
+            var resultingQuote = ItemManager.deleteItem(123);
+        });
+    }
+
+    @Test
+    void completeItem_Success() {
+        var expectedQuote = new TodoItem("Assignment3", "homework3" , "2021-04-15T12:00",3,"false", "null");
+        var resultingQuote = ItemManager.completeItem(3);
+        assertEquals(true,resultingQuote.checkIfCompleted());
+    }
+
+
+
+    @Test
     void deleteItem_NotExistingId() {
         assertEquals(3, ItemManager.getAllItems().size());
         assertThrows(ItemIdNotExistsException.class, () -> {
@@ -72,12 +106,16 @@ class TodoItemManagerTest {
         assertEquals(2, ItemManager.getAllItems().size());
     }
 
+
+
     @AfterEach
     void disposeDB() {
         ItemManager.disposeResources();
         File dbFile = new File(Paths.get(".").normalize().toAbsolutePath() + "\\test.db");
         dbFile.delete();
     }
+
+
 
 
 }
