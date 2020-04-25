@@ -3,6 +3,7 @@ package CloudUtilsTest;
 
 import cloudutils.CloudEditor;
 import cloudutils.CloudGetter;
+import database.TodoItemManager;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import todo.TodoItem;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -17,6 +19,8 @@ class CloudGetterTest
 {
     CloudGetter cloudGetter;
     CloudEditor cloudEditor;
+    TodoItemManager database = new TodoItemManager();
+
 
     TodoItem item1 = new TodoItem("test task 1",
             "first test task, This should not be deleted.", "2020-05-18T12:30",1,"false", "null");
@@ -26,16 +30,21 @@ class CloudGetterTest
             "third test task, This should not be deleted.", "2021-04-18T15:30",3,"false" , "null");
 
     @BeforeEach
-    void setup() throws IOException
-    {
+    void setup() throws IOException, SQLException {
+
+
         cloudGetter = new CloudGetter();
         cloudEditor = new CloudEditor();
-
+        database.clear();
         cloudEditor.clearCloud();
 
         cloudEditor.addTodoItem(item1);
         cloudEditor.addTodoItem(item2);
         cloudEditor.addTodoItem(item3);
+
+        database.addItem(item1);
+        database.addItem(item2);
+        database.addItem(item3);
     }
 
 

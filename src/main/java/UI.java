@@ -236,10 +236,12 @@ public class UI extends JFrame implements ActionListener {
                     //Sync data from database (Network connection failed)
                     list.setItemsInTodoList(databaseManager.getAllItems());
                 }else {
-                    //Sync data
+                    //Sync data from cloud to local
                     try {
                         list.synchronousData(databaseManager, cloudEditor);
                         list.setItemsInTodoList(databaseManager.getAllItems());
+                        String JsonString = cloudGetter.getTodoItemJsonString();
+                        cloudData = parser.parseJsonTodoItem(JsonString);
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
                     }
