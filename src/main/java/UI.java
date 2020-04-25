@@ -55,7 +55,7 @@ public class UI extends JFrame implements ActionListener {
         setContentPane(panel);
 
         //Area showing to-do items
-        todoItems = new JTextArea("This will show all current todo items, please click the sync button to import data first");
+        todoItems = new JTextArea("Please click the sync button to import data first");
         var recentConstraints = new GridBagConstraints(0, 0, 2,13 , 0, 0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10), 0, 0);
         panel.add(todoItems, recentConstraints);
         todoItems.setSize(1200,1200);
@@ -217,7 +217,7 @@ public class UI extends JFrame implements ActionListener {
                 String reminderInformation = "";
                 list.setOverDueItems(reminders.getOverDueItems(list));
                 list.setDueWithin24HoursItems(reminders.getDueWithin24HoursItems(list));
-                reminderInformation = reminders.getRemindeInformation(list.getOverDueItems(),list.getDueWithin24HoursItems());
+                reminderInformation = reminders.getReminderInformation(list.getOverDueItems(),list.getDueWithin24HoursItems());
                 JOptionPane.showMessageDialog(null,reminderInformation);
             }
         });
@@ -232,30 +232,22 @@ public class UI extends JFrame implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 //Check network connection
                 if (!cloudGetter.checkURL()) {
-                    JOptionPane.showMessageDialog(null,"The network is not currently connected");
-                    //Sync data from database (Network connection failed)
+                    JOptionPane.showMessageDialog(null,"The network is not currently connected"+"\r\n"+"Enter offline mode, import data from local database.");
+                    //Import data
                     list.setItemsInTodoList(databaseManager.getAllItems());
+                    JOptionPane.showMessageDialog(null,"Successfully imported data from local database!");
                 }else {
-                    //Sync data from cloud to local
                     try {
-                        String JsonString = cloudGetter.getTodoItemJsonString();
-                        cloudData = parser.parseJsonTodoItem(JsonString);
-                        if (list.matchingData(databaseManager, cloudData)) {
-                            list = cloudData;
-                            databaseManager.clear();
-                            for (TodoItem item : list.getItemsInTodoList()) {
-                                databaseManager.addItem(item);
-                            }
-                        }else {
-                            list.synchronousData(databaseManager, cloudEditor);
-                            list.setItemsInTodoList(databaseManager.getAllItems());
-                        }
-                    } catch (IOException | SQLException ioException) {
+                        //Synchronize the latest local data to the cloud
+                        list.synchronousData(databaseManager, cloudEditor);
+                        //Import data
+                        list.setItemsInTodoList(databaseManager.getAllItems());
+                    } catch (IOException ioException) {
                         ioException.printStackTrace();
                     }
+                    JOptionPane.showMessageDialog(null,"Successfully synchronized!");
                 }
                 //Display current items
-                JOptionPane.showMessageDialog(null,"Successfully synchronized!");
                 todoItems.setText(list.AllItemInformation());
             }
         });
@@ -331,7 +323,7 @@ public class UI extends JFrame implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 //Check network connection
                 if (!cloudGetter.checkURL()) {
-                    JOptionPane.showMessageDialog(null,"The network is not currently connected");
+                    JOptionPane.showMessageDialog(null,"Please connect to the internet before using");
                 }else {
                     ChartUI pieChart=new ChartUI("Todo Item PieChart");
                 }

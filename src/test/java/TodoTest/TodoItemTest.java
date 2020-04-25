@@ -70,8 +70,4 @@ class TodoItemTest
     }
 
 
-    //add update method test?
-
-
-
 }

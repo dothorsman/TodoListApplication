@@ -32,11 +32,7 @@ public class TodoItem
      @DatabaseField(dataType=DataType.SERIALIZABLE)
      private LocalDateTime deadlineTime;
 
-     public TodoItem(){
-
-     }
-
-
+     public TodoItem(){ }
 
      public TodoItem(String title, String description, String deadline, int id, String status, String completionTime )
      {
@@ -51,10 +47,6 @@ public class TodoItem
                this.completionTime = LocalDateTime.of(1,1,1,1,1);
           }
           this.deadlineTime = LocalDateTime.parse(deadline, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-     }
-
-     public void setCompletionTime(LocalDateTime completionTime) {
-          this.completionTime = completionTime;
      }
 
      public String getTitle() {
@@ -93,7 +85,6 @@ public class TodoItem
           this.creationTime = LocalDateTime.parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
      }
 
-
      public LocalDateTime getDeadlineTime() {
           return deadlineTime;
      }
@@ -107,7 +98,6 @@ public class TodoItem
      {
           this.deadlineTime = LocalDateTime.parse(snoozeDate, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
      }
-
 
      public void setStatus(boolean status){
           this.status=status;
@@ -131,15 +121,13 @@ public class TodoItem
           return completionTime;
      }
 
-
-
      public void updateItem(String newTitle, String newDescription, boolean newStatus, String newDeadline)
      {
           this.setTitle(newTitle);
           this.setDescription(newDescription);
           this.setCreationTime();
 
-          if(newStatus == false)
+          if(!newStatus)
           {
                this.changeToIncomplete();
           }
