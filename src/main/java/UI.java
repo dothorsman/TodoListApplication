@@ -217,7 +217,7 @@ public class UI extends JFrame implements ActionListener {
                 String reminderInformation = "";
                 list.setOverDueItems(reminders.getOverDueItems(list));
                 list.setDueWithin24HoursItems(reminders.getDueWithin24HoursItems(list));
-                reminderInformation = reminders.getRemindeInformation(list.getOverDueItems(),list.getDueWithin24HoursItems());
+                reminderInformation = reminders.getReminderInformation(list.getOverDueItems(),list.getDueWithin24HoursItems());
                 JOptionPane.showMessageDialog(null,reminderInformation);
             }
         });
@@ -236,21 +236,11 @@ public class UI extends JFrame implements ActionListener {
                     //Sync data from database (Network connection failed)
                     list.setItemsInTodoList(databaseManager.getAllItems());
                 }else {
-                    //Sync data from cloud to local
+                    //Sync data
                     try {
-                        String JsonString = cloudGetter.getTodoItemJsonString();
-                        cloudData = parser.parseJsonTodoItem(JsonString);
-                        if (list.matchingData(databaseManager, cloudData)) {
-                            list = cloudData;
-                            databaseManager.clear();
-                            for (TodoItem item : list.getItemsInTodoList()) {
-                                databaseManager.addItem(item);
-                            }
-                        }else {
-                            list.synchronousData(databaseManager, cloudEditor);
-                            list.setItemsInTodoList(databaseManager.getAllItems());
-                        }
-                    } catch (IOException | SQLException ioException) {
+                        list.synchronousData(databaseManager, cloudEditor);
+                        list.setItemsInTodoList(databaseManager.getAllItems());
+                    } catch (IOException ioException) {
                         ioException.printStackTrace();
                     }
                 }
