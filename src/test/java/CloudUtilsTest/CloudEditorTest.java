@@ -25,8 +25,6 @@ public class CloudEditorTest
 
     TodoItem item0 = new TodoItem("TEST TASK 0", "ZERO TEST TASK",
             "2030-06-14T15:00",4, "false", "null");
-    TodoItem nonexistingItem = new TodoItem("nope", "should not exist in cloud or database",
-            "2050-06-14T15:00",5, "false", "null");
 
     boolean empty = false;
 
@@ -63,6 +61,7 @@ public class CloudEditorTest
                 "  \"description\": \"" + item0.getDescription() + "\",\n" +
                 "  \"creation time\": \"" + item0.getCreationTime() + "\",\n" +
                 "  \"deadline time\": \""  + item0.getDeadlineTime() + "\",\n" +
+                "  \"completion time\": \"" + item0.getCompletionTime() + "\",\n" +
                 "  \"status\": \"" + item0.checkIfCompleted() + "\",\n" +
                 "  \"id\": " + resultingID +
                 "\n}";
@@ -70,7 +69,6 @@ public class CloudEditorTest
 
         assertEquals(expected, actual);
     }
-
 
     @Test
     void clearCloud() throws IOException
@@ -83,7 +81,6 @@ public class CloudEditorTest
         assertTrue(empty);
     }
 
-
     @Test
     void clearingAnEmptyCloud() throws IOException
     {
@@ -93,49 +90,6 @@ public class CloudEditorTest
         empty = cloudEditor.clearCloud();
         assertTrue(empty);
     }
-
-
-
-    @Test
-    void updateExistingTodoItemIncomplete() throws IOException
-    {
-        //changed the item 0 at the top to match the expected for the title and description but trying to update it does not work
-        var resultingID = cloudEditor.addTodoItem(item0);
-
-        var expected = "{\n" +
-                "  \"title\": \"TEST TASK 0\",\n" +
-                "  \"owner\": \"team4\",\n" +
-                "  \"description\": \"ZERO TEST TASK\",\n" +
-                "  \"creation time\": \"" + item0.getCreationTime() + "\",\n" +
-                "  \"deadline time\": \""  + item0.getDeadlineTime() + "\",\n" +
-                "  \"status\": \"" + item0.checkIfCompleted() + "\",\n" +
-                "  \"id\": " + resultingID + "\n" +
-                "}";
-        var actual = cloudGetter.getTodoItemJsonString(resultingID);
-
-        var updated = cloudEditor.updateTodoItem(item0, "test task 0",
-                "zero test task 1", false, "2033-06-14T15:00");
-
-        assertEquals(expected, actual);
-        assertTrue(updated);
-    }
-
-
-
-    @Test
-    void updateNotExistingTodoItem() throws IOException
-    {
-        var updated = cloudEditor.updateTodoItem(nonexistingItem, "hello1", "hellohello", true,
-                "2020-04-05T12:30");
-        assertFalse(updated);
-    }
-
-
-    //@Test
-    //void updateExistingTodoItemComplete() throws IOException {
-
-    //}
-
     
     @AfterEach
     void add3TestItemsBackIn() throws IOException

@@ -62,38 +62,6 @@ public class CloudEditor
         return true;
     }
 
-    public boolean updateTodoItem(TodoItem originalItem, String newTitle, String newDescription,
-                               boolean newStatus, String newDeadline) throws IOException
-    {
-        Map<String, Object> data = new LinkedHashMap<>();
-
-        originalItem.updateItem(newTitle, newDescription, newStatus, newDeadline);
-
-        data.put("title", originalItem.getTitle());
-        data.put("owner", originalItem.getOwner());
-        data.put("description", originalItem.getDescription());
-        data.put("creation time", originalItem.getCreationTime());
-        data.put("deadline time", originalItem.getDeadlineTime());
-        data.put("completion time", originalItem.getCompletionTime());
-        data.put("status", originalItem.checkIfCompleted());
-        data.put("id", originalItem.getId());
-
-        HttpContent content = new UrlEncodedContent(data);
-
-        HttpRequest putRequest = requestFactory.buildPutRequest(
-                new GenericUrl(baseURL + originalItem.getId()), content);
-        try
-        {
-            String rawResponse = putRequest.execute().parseAsString();
-
-        }
-        catch(HttpResponseException hre)
-        {
-            return(false);
-        }
-
-        return(true);
-    }
 
     public boolean completedItem(TodoItem originalItem) throws IOException
     {
@@ -178,10 +146,5 @@ public class CloudEditor
         }
 
         return(false);
-    }
-
-    public static void main(String[] args) throws IOException {
-        CloudEditor a = new CloudEditor();
-        a.clearCloud();
     }
 }
