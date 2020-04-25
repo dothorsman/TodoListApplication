@@ -121,6 +121,14 @@ public class TodoList
         this.itemsInTodoList = allItems;
     }
 
+    public boolean matchingData(TodoItemManager database, TodoList cloud) throws SQLException, IOException {
+        if (database.getAllItems().size() > cloud.getItemsInTodoList().size()){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
     public TodoItem findItemByID (int id){
         TodoItem findItem = null;
         for (TodoItem Item: itemsInTodoList){
